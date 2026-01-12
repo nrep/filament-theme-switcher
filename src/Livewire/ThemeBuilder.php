@@ -366,13 +366,52 @@ class ThemeBuilder extends Component
         $primaryColor = $this->colors['primary'] ?? '#3b82f6';
         
         if ($loginStyle === 'gradient') {
-            $css .= ".fi-simple-layout { background: linear-gradient(135deg, {$primaryColor} 0%, color-mix(in srgb, {$primaryColor} 70%, #6366f1) 100%); }\n";
+            $css .= ".fi-simple-layout { 
+                background: linear-gradient(135deg, {$primaryColor} 0%, color-mix(in srgb, {$primaryColor} 60%, #1e1b4b) 50%, color-mix(in srgb, {$primaryColor} 40%, #0f172a) 100%);
+                min-height: 100vh;
+            }\n";
+            $css .= ".fi-simple-main { 
+                backdrop-filter: blur(20px);
+                background: rgba(255, 255, 255, 0.95);
+                border-radius: 24px;
+                box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(255, 255, 255, 0.1);
+            }\n";
+            $css .= ".dark .fi-simple-main {
+                background: rgba(30, 30, 40, 0.9);
+                border: 1px solid rgba(255, 255, 255, 0.1);
+            }\n";
         } elseif ($loginStyle === 'split') {
-            $css .= ".fi-simple-layout { display: grid; grid-template-columns: 1fr 1fr; }\n";
-            $css .= ".fi-simple-layout::before { content: ''; background: linear-gradient(135deg, {$primaryColor}, color-mix(in srgb, {$primaryColor} 50%, black)); }\n";
+            $css .= ".fi-simple-layout { 
+                display: grid; 
+                grid-template-columns: 1fr 1fr; 
+                min-height: 100vh;
+            }\n";
+            $css .= ".fi-simple-layout::before { 
+                content: ''; 
+                background: linear-gradient(135deg, {$primaryColor} 0%, color-mix(in srgb, {$primaryColor} 50%, #1e1b4b) 100%);
+            }\n";
+            $css .= ".fi-simple-main {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                padding: 2rem;
+            }\n";
+            $css .= "@media (max-width: 768px) { .fi-simple-layout { grid-template-columns: 1fr; } .fi-simple-layout::before { display: none; } }\n";
         } elseif ($loginStyle === 'fullscreen') {
-            $css .= ".fi-simple-layout { background-size: cover; background-position: center; }\n";
-            $css .= ".fi-simple-main { backdrop-filter: blur(10px); background: rgba(255,255,255,0.9); }\n";
+            $css .= ".fi-simple-layout { 
+                background: linear-gradient(180deg, color-mix(in srgb, {$primaryColor} 20%, transparent) 0%, transparent 50%),
+                            radial-gradient(ellipse at top right, color-mix(in srgb, {$primaryColor} 30%, transparent), transparent 50%);
+                background-color: #f8fafc;
+                min-height: 100vh;
+            }\n";
+            $css .= ".fi-simple-main { 
+                backdrop-filter: blur(10px);
+                background: rgba(255, 255, 255, 0.8);
+                border-radius: 16px;
+                box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.1);
+            }\n";
+            $css .= ".dark .fi-simple-layout { background-color: #0f172a; }\n";
+            $css .= ".dark .fi-simple-main { background: rgba(30, 41, 59, 0.8); }\n";
         }
         
         // Show/hide app name in sidebar
