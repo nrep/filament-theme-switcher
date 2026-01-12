@@ -16,6 +16,10 @@ class UserTheme extends Model
         'colors',
         'dark_mode',
         'custom_css',
+        'fonts',
+        'components',
+        'spacing',
+        'brand',
         'color_history',
         'favorite_colors',
         'scheduled_dark_mode',
@@ -23,6 +27,10 @@ class UserTheme extends Model
 
     protected $casts = [
         'colors' => 'array',
+        'fonts' => 'array',
+        'components' => 'array',
+        'spacing' => 'array',
+        'brand' => 'array',
         'color_history' => 'array',
         'favorite_colors' => 'array',
         'scheduled_dark_mode' => 'array',

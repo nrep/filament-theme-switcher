@@ -9,14 +9,29 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('user_themes', function (Blueprint $table) {
+            // Add dark_mode and custom_css if they don't exist
             if (!Schema::hasColumn('user_themes', 'dark_mode')) {
                 $table->string('dark_mode')->default('system')->after('colors');
             }
             if (!Schema::hasColumn('user_themes', 'custom_css')) {
                 $table->text('custom_css')->nullable()->after('dark_mode');
             }
+
+            // Add theme builder extended fields
+            if (!Schema::hasColumn('user_themes', 'fonts')) {
+                $table->json('fonts')->nullable()->after('custom_css');
+            }
+            if (!Schema::hasColumn('user_themes', 'components')) {
+                $table->json('components')->nullable()->after('fonts');
+            }
+            if (!Schema::hasColumn('user_themes', 'spacing')) {
+                $table->json('spacing')->nullable()->after('components');
+            }
+            if (!Schema::hasColumn('user_themes', 'brand')) {
+                $table->json('brand')->nullable()->after('spacing');
+            }
             if (!Schema::hasColumn('user_themes', 'color_history')) {
-                $table->json('color_history')->nullable()->after('custom_css');
+                $table->json('color_history')->nullable()->after('brand');
             }
             if (!Schema::hasColumn('user_themes', 'favorite_colors')) {
                 $table->json('favorite_colors')->nullable()->after('color_history');
@@ -30,7 +45,16 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('user_themes', function (Blueprint $table) {
-            $table->dropColumn(['dark_mode', 'custom_css', 'color_history', 'favorite_colors', 'scheduled_dark_mode']);
+            $columns = ['dark_mode', 'custom_css', 'fonts', 'components', 'spacing', 'brand', 'color_history', 'favorite_colors', 'scheduled_dark_mode'];
+            $existingColumns = [];
+            foreach ($columns as $column) {
+                if (Schema::hasColumn('user_themes', $column)) {
+                    $existingColumns[] = $column;
+                }
+            }
+            if (!empty($existingColumns)) {
+                $table->dropColumn($existingColumns);
+            }
         });
     }
 };
