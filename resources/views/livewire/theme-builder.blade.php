@@ -52,11 +52,21 @@
                 </div>
 
                 {{-- Color Pickers --}}
+                @php
+                    $colorLabels = [
+                        'primary' => 'Primary',
+                        'danger' => 'Danger',
+                        'success' => 'Success',
+                        'warning' => 'Warning',
+                        'info' => 'Info',
+                        'gray' => 'Gray',
+                    ];
+                @endphp
                 <div class="grid grid-cols-2 gap-4">
                     @foreach(['primary', 'danger', 'success', 'warning', 'info', 'gray'] as $slot)
                         <div>
                             <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 capitalize">
-                                {{ __('filament-theme-switcher::theme-switcher.colors.' . $slot) }}
+                                {{ $colorLabels[$slot] }}
                             </label>
                             <div class="flex items-center gap-2">
                                 <input 

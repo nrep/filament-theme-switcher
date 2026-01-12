@@ -75,13 +75,15 @@ class ThemeBuilder extends Component
     {
         $themeManager = app(ThemeManager::class);
         
-        // Load current theme settings
-        $currentColors = $themeManager->getCurrentColors();
-        if ($currentColors) {
+        // Load current theme settings from session directly for reliability
+        $sessionColors = session('filament_theme_colors');
+        $currentColors = $sessionColors ?? $themeManager->getCurrentColors();
+        
+        if ($currentColors && is_array($currentColors)) {
             $this->colors = array_merge($this->colors, $currentColors);
         }
         
-        $this->customCss = $themeManager->getCustomCss() ?? '';
+        $this->customCss = session('filament_custom_css') ?? $themeManager->getCustomCss() ?? '';
         
         // Save initial state to history
         $this->saveToHistory();
@@ -245,7 +247,11 @@ class ThemeBuilder extends Component
     {
         $themeManager = app(ThemeManager::class);
         
-        // Save the theme with colors and custom CSS
+        // Save colors directly to session for reliability
+        session(['filament_theme_colors' => $this->colors]);
+        session(['filament_custom_css' => $this->generateComponentCss()]);
+        
+        // Also save through ThemeManager for consistency
         $themeManager->setTheme(
             $themeManager->getCurrentTheme() ?? 'default',
             $this->colors,
