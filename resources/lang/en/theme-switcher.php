@@ -63,4 +63,12 @@ return [
     // CSS Snippets
     'css_snippets' => 'Quick Snippets',
     'css_snippets_placeholder' => 'Select a snippet to add...',
+
+    // Palette Generator
+    'generate_palette' => 'Generate Palette',
+    'palette_placeholder' => 'Generate colors from primary...',
+    'palette_complementary' => 'Complementary (opposite)',
+    'palette_analogous' => 'Analogous (adjacent)',
+    'palette_triadic' => 'Triadic (triangle)',
+    'palette_split' => 'Split Complementary',
 ];

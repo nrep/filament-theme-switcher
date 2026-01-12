@@ -18,6 +18,7 @@ use Filament\Forms\Form;
 use Filament\Notifications\Notification;
 use Filament\Pages\Page;
 use Isura\FilamentThemeSwitcher\FilamentThemeSwitcherPlugin;
+use Isura\FilamentThemeSwitcher\Support\ColorPaletteGenerator;
 use Isura\FilamentThemeSwitcher\Support\CssSnippets;
 use Isura\FilamentThemeSwitcher\ThemeManager;
 
@@ -118,10 +119,62 @@ class ThemeSettings extends Page implements HasForms
                 Section::make(__('filament-theme-switcher::theme-switcher.customize_colors'))
                     ->description(__('filament-theme-switcher::theme-switcher.customize_colors_description'))
                     ->schema([
-                        Grid::make(3)
+                        Grid::make(2)
                             ->schema([
                                 ColorPicker::make('colors.primary')
-                                    ->label(__('filament-theme-switcher::theme-switcher.colors.primary')),
+                                    ->label(__('filament-theme-switcher::theme-switcher.colors.primary'))
+                                    ->live(debounce: 500),
+                                Select::make('palette_type')
+                                    ->label(__('filament-theme-switcher::theme-switcher.generate_palette'))
+                                    ->options([
+                                        'complementary' => __('filament-theme-switcher::theme-switcher.palette_complementary'),
+                                        'analogous' => __('filament-theme-switcher::theme-switcher.palette_analogous'),
+                                        'triadic' => __('filament-theme-switcher::theme-switcher.palette_triadic'),
+                                        'split' => __('filament-theme-switcher::theme-switcher.palette_split'),
+                                    ])
+                                    ->placeholder(__('filament-theme-switcher::theme-switcher.palette_placeholder'))
+                                    ->live()
+                                    ->afterStateUpdated(function ($state, $set, $get) {
+                                        $primary = $get('colors.primary');
+                                        if (!$state || !$primary) return;
+                                        
+                                        $palette = match($state) {
+                                            'complementary' => ColorPaletteGenerator::complementary($primary),
+                                            'analogous' => ColorPaletteGenerator::analogous($primary),
+                                            'triadic' => ColorPaletteGenerator::triadic($primary),
+                                            'split' => ColorPaletteGenerator::splitComplementary($primary),
+                                            default => [],
+                                        };
+                                        
+                                        if (!empty($palette)) {
+                                            // Apply generated colors
+                                            if (isset($palette['complementary'])) {
+                                                $set('colors.danger', $palette['complementary']);
+                                            }
+                                            if (isset($palette['analogous_left'])) {
+                                                $set('colors.info', $palette['analogous_left']);
+                                            }
+                                            if (isset($palette['analogous_right'])) {
+                                                $set('colors.success', $palette['analogous_right']);
+                                            }
+                                            if (isset($palette['triadic_1'])) {
+                                                $set('colors.warning', $palette['triadic_1']);
+                                            }
+                                            if (isset($palette['triadic_2'])) {
+                                                $set('colors.info', $palette['triadic_2']);
+                                            }
+                                            if (isset($palette['split_1'])) {
+                                                $set('colors.success', $palette['split_1']);
+                                            }
+                                            if (isset($palette['split_2'])) {
+                                                $set('colors.warning', $palette['split_2']);
+                                            }
+                                        }
+                                        $set('palette_type', null);
+                                    }),
+                            ]),
+                        Grid::make(3)
+                            ->schema([
                                 ColorPicker::make('colors.danger')
                                     ->label(__('filament-theme-switcher::theme-switcher.colors.danger')),
                                 ColorPicker::make('colors.success')
