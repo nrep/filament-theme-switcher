@@ -1,7 +1,7 @@
 # Filament Theme Switcher - Premium Roadmap
 
 > **Project:** nrep/filament-theme-switcher  
-> **Current Version:** v1.1.0  
+> **Current Version:** v2.1.0  
 > **Target:** Premium Filament Plugin  
 > **Last Updated:** 2026-01-12
 
@@ -18,7 +18,7 @@ Transform the basic theme switcher into a premium Filament plugin with advanced 
 | Version | Codename | Target Date | Status |
 |---------|----------|-------------|--------|
 | v1.x | Foundation | Jan 2026 | ✅ Released |
-| v2.0 | Dark Matter | Feb 2026 | 🔄 Planning |
+| v2.0 | Dark Matter | Jan 2026 | ✅ Released |
 | v3.0 | Architect | Apr 2026 | 📋 Planned |
 | v4.0 | Marketplace | Jun 2026 | 📋 Planned |
 
@@ -76,10 +76,10 @@ Transform the basic theme switcher into a premium Filament plugin with advanced 
 ### Milestone: Enhanced Color System
 > Priority: Medium | Effort: Medium
 
-- [ ] **EC-001**: Add all Filament color slots (primary, secondary, danger, warning, success, info, gray)
+- [x] **EC-001**: Add all Filament color slots (primary, secondary, danger, warning, success, info, gray)
 - [ ] **EC-002**: Add gradient support for primary colors
-- [ ] **EC-003**: Create color palette generator (complementary, analogous, triadic)
-- [ ] **EC-004**: Add color history/favorites
+- [x] **EC-003**: Create color palette generator (complementary, analogous, triadic)
+- [x] **EC-004**: Add color history/favorites
 
 ### v2.0 Release Checklist
 - [ ] All milestone tasks completed
@@ -258,6 +258,8 @@ Transform the basic theme switcher into a premium Filament plugin with advanced 
   - Updated translations for new features
   - Added dark mode color variants for all 7 themes
   - Added dark mode toggle to Livewire switcher dropdown
+  - Added ColorPaletteGenerator support class
+  - Added color history and favorites functionality
 
 ### 2026-01-11
 - Released v1.0.0 (initial release)

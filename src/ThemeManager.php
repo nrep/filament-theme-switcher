@@ -326,4 +326,83 @@ class ThemeManager
 
         return true;
     }
+
+    public function getColorHistory(): array
+    {
+        $plugin = $this->getPlugin();
+
+        if ($plugin?->isUserMode() && auth()->check()) {
+            $userTheme = UserTheme::where('user_id', auth()->id())
+                ->where('panel_id', Filament::getCurrentPanel()?->getId())
+                ->first();
+
+            return $userTheme?->color_history ?? [];
+        }
+
+        return Session::get('filament_color_history', []);
+    }
+
+    public function addToColorHistory(string $color): void
+    {
+        $history = $this->getColorHistory();
+        
+        // Remove if already exists (to move to front)
+        $history = array_filter($history, fn($c) => $c !== $color);
+        
+        // Add to beginning
+        array_unshift($history, $color);
+        
+        // Keep only last 20 colors
+        $history = array_slice($history, 0, 20);
+
+        $plugin = $this->getPlugin();
+
+        if ($plugin?->isUserMode() && auth()->check()) {
+            UserTheme::where('user_id', auth()->id())
+                ->where('panel_id', Filament::getCurrentPanel()?->getId())
+                ->update(['color_history' => $history]);
+        } else {
+            Session::put('filament_color_history', $history);
+        }
+    }
+
+    public function getFavoriteColors(): array
+    {
+        $plugin = $this->getPlugin();
+
+        if ($plugin?->isUserMode() && auth()->check()) {
+            $userTheme = UserTheme::where('user_id', auth()->id())
+                ->where('panel_id', Filament::getCurrentPanel()?->getId())
+                ->first();
+
+            return $userTheme?->favorite_colors ?? [];
+        }
+
+        return Session::get('filament_favorite_colors', []);
+    }
+
+    public function toggleFavoriteColor(string $color): bool
+    {
+        $favorites = $this->getFavoriteColors();
+        
+        if (in_array($color, $favorites)) {
+            $favorites = array_filter($favorites, fn($c) => $c !== $color);
+            $isFavorite = false;
+        } else {
+            $favorites[] = $color;
+            $isFavorite = true;
+        }
+
+        $plugin = $this->getPlugin();
+
+        if ($plugin?->isUserMode() && auth()->check()) {
+            UserTheme::where('user_id', auth()->id())
+                ->where('panel_id', Filament::getCurrentPanel()?->getId())
+                ->update(['favorite_colors' => array_values($favorites)]);
+        } else {
+            Session::put('filament_favorite_colors', array_values($favorites));
+        }
+
+        return $isFavorite;
+    }
 }

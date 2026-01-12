@@ -15,6 +15,12 @@ return new class extends Migration
             if (!Schema::hasColumn('user_themes', 'custom_css')) {
                 $table->text('custom_css')->nullable()->after('dark_mode');
             }
+            if (!Schema::hasColumn('user_themes', 'color_history')) {
+                $table->json('color_history')->nullable()->after('custom_css');
+            }
+            if (!Schema::hasColumn('user_themes', 'favorite_colors')) {
+                $table->json('favorite_colors')->nullable()->after('color_history');
+            }
         });
     }
 

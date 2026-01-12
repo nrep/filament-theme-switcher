@@ -16,10 +16,14 @@ class UserTheme extends Model
         'colors',
         'dark_mode',
         'custom_css',
+        'color_history',
+        'favorite_colors',
     ];
 
     protected $casts = [
         'colors' => 'array',
+        'color_history' => 'array',
+        'favorite_colors' => 'array',
     ];
 
     protected $attributes = [
