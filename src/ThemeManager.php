@@ -5,7 +5,6 @@ namespace Isura\FilamentThemeSwitcher;
 use Filament\Facades\Filament;
 use Filament\Support\Colors\Color;
 use Filament\Support\Facades\FilamentColor;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Session;
 use Isura\FilamentThemeSwitcher\Contracts\Theme;
 use Isura\FilamentThemeSwitcher\Models\UserTheme;
@@ -61,6 +60,13 @@ class ThemeManager
 
                 return $this->currentColors;
             }
+        } else {
+            // For global mode, check session for custom colors
+            $colors = Session::get('filament_theme_colors');
+            if ($colors) {
+                $this->currentColors = $colors;
+                return $this->currentColors;
+            }
         }
 
         return null;
@@ -85,7 +91,9 @@ class ThemeManager
             Session::put('filament_theme', $theme);
             
             if ($colors) {
-                Cache::put('filament_theme_colors', $colors, now()->addYear());
+                Session::put('filament_theme_colors', $colors);
+            } else {
+                Session::forget('filament_theme_colors');
             }
         }
 
@@ -121,7 +129,14 @@ class ThemeManager
             return;
         }
 
-        $colors = $this->getCurrentColors() ?? $theme->getColors();
+        // Get base theme colors
+        $themeColors = $theme->getColors();
+        
+        // Get custom color overrides
+        $customColors = $this->getCurrentColors();
+        
+        // Merge custom colors over theme colors
+        $colors = $customColors ? array_merge($themeColors, array_filter($customColors)) : $themeColors;
 
         // Apply colors to Filament
         FilamentColor::register([
