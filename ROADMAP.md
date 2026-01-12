@@ -150,12 +150,12 @@ Transform the basic theme switcher into a premium Filament plugin with advanced 
 ### Milestone: Theme Marketplace
 > Priority: Medium | Effort: High
 
-- [ ] **TM-001**: Design marketplace UI
-- [ ] **TM-002**: Create theme submission workflow
-- [ ] **TM-003**: Implement theme installation from marketplace
-- [ ] **TM-004**: Add theme ratings and reviews
-- [ ] **TM-005**: Create theme versioning system
-- [ ] **TM-006**: Add theme update notifications
+- [x] **TM-001**: Design marketplace UI
+- [x] **TM-002**: Create theme submission workflow
+- [x] **TM-003**: Implement theme installation from marketplace
+- [x] **TM-004**: Add theme ratings and reviews
+- [x] **TM-005**: Create theme versioning system
+- [x] **TM-006**: Add theme update notifications
 
 ### Milestone: Analytics Dashboard
 > Priority: Low | Effort: Medium
