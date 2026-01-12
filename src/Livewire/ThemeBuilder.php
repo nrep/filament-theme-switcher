@@ -73,22 +73,36 @@ class ThemeBuilder extends Component
 
     public function mount(): void
     {
-        // Load colors from session first (most reliable)
-        $sessionColors = session()->get('filament_theme_colors');
+        // Load all theme builder state from session
+        $savedState = session()->get('filament_theme_builder_state');
         
-        if ($sessionColors && is_array($sessionColors)) {
-            $this->colors = array_merge($this->colors, $sessionColors);
+        if ($savedState && is_array($savedState)) {
+            if (isset($savedState['colors']) && is_array($savedState['colors'])) {
+                $this->colors = array_merge($this->colors, $savedState['colors']);
+            }
+            if (isset($savedState['fonts']) && is_array($savedState['fonts'])) {
+                $this->fonts = array_merge($this->fonts, $savedState['fonts']);
+            }
+            if (isset($savedState['components']) && is_array($savedState['components'])) {
+                $this->components = array_merge($this->components, $savedState['components']);
+            }
+            if (isset($savedState['spacing']) && is_array($savedState['spacing'])) {
+                $this->spacing = array_merge($this->spacing, $savedState['spacing']);
+            }
+            if (isset($savedState['brand']) && is_array($savedState['brand'])) {
+                $this->brand = array_merge($this->brand, $savedState['brand']);
+            }
+            if (isset($savedState['customCss'])) {
+                $this->customCss = $savedState['customCss'];
+            }
         } else {
-            // Fallback to ThemeManager if no session data
+            // Fallback to ThemeManager for colors only
             $themeManager = app(ThemeManager::class);
             $currentColors = $themeManager->getCurrentColors();
             if ($currentColors && is_array($currentColors)) {
                 $this->colors = array_merge($this->colors, $currentColors);
             }
         }
-        
-        // Load custom CSS
-        $this->customCss = session()->get('filament_custom_css', '');
         
         // Save initial state to history
         $this->saveToHistory();
@@ -253,7 +267,18 @@ class ThemeBuilder extends Component
         $themeManager = app(ThemeManager::class);
         $generatedCss = $this->generateComponentCss();
         
-        // Save through ThemeManager
+        // Save all theme builder state to session
+        $state = [
+            'colors' => $this->colors,
+            'fonts' => $this->fonts,
+            'components' => $this->components,
+            'spacing' => $this->spacing,
+            'brand' => $this->brand,
+            'customCss' => $generatedCss,
+        ];
+        session()->put('filament_theme_builder_state', $state);
+        
+        // Also save through ThemeManager for color application
         $themeManager->setTheme(
             $themeManager->getCurrentTheme() ?? 'default',
             $this->colors,
@@ -261,12 +286,15 @@ class ThemeBuilder extends Component
             $generatedCss
         );
         
-        // Also save directly to session for reliability
-        session()->put('filament_theme_colors', $this->colors);
-        session()->put('filament_custom_css', $generatedCss);
-        
         // Force session save before reload
         session()->save();
+        
+        // Show success notification
+        \Filament\Notifications\Notification::make()
+            ->title('Theme Applied')
+            ->body('Your theme settings have been saved successfully.')
+            ->success()
+            ->send();
         
         // Dispatch browser event to trigger page reload
         $this->dispatch('theme-applied-reload');
