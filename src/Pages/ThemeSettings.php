@@ -4,6 +4,7 @@ namespace Isura\FilamentThemeSwitcher\Pages;
 
 use Filament\Actions\Action;
 use Filament\Forms\Components\ColorPicker;
+use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
@@ -12,6 +13,7 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\TimePicker;
 use Filament\Forms\Components\Toggle;
 use Filament\Forms\Components\ToggleButtons;
+use Filament\Forms\Components\ViewField;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Form;
@@ -281,11 +283,32 @@ class ThemeSettings extends Page implements HasForms
 
         $colors = array_filter($data['colors'] ?? []);
 
+        // Validate and scope custom CSS before saving
+        $customCss = $data['custom_css'] ?? null;
+        if ($customCss) {
+            $cssErrors = CssSnippets::validate($customCss);
+            if (!empty($cssErrors)) {
+                Notification::make()
+                    ->title(__('filament-theme-switcher::theme-switcher.css_validation_error'))
+                    ->body(implode(', ', $cssErrors))
+                    ->danger()
+                    ->send();
+                return;
+            }
+        }
+
+        // Track color history
+        foreach ($colors as $color) {
+            if ($color) {
+                $themeManager->addToColorHistory($color);
+            }
+        }
+
         $themeManager->setTheme(
             $data['theme'],
             !empty($colors) ? $colors : null,
             $data['dark_mode'] ?? 'system',
-            $data['custom_css'] ?? null
+            $customCss
         );
 
         // Save scheduled dark mode settings
@@ -356,6 +379,20 @@ class ThemeSettings extends Page implements HasForms
                 ->color('gray')
                 ->action('exportTheme')
                 ->visible(fn () => $themeManager->isImportExportEnabled()),
+            Action::make('import')
+                ->label(__('filament-theme-switcher::theme-switcher.import'))
+                ->icon('heroicon-o-arrow-up-tray')
+                ->color('gray')
+                ->form([
+                    FileUpload::make('theme_file')
+                        ->label(__('filament-theme-switcher::theme-switcher.import_file'))
+                        ->acceptedFileTypes(['application/json'])
+                        ->required(),
+                ])
+                ->action(function (array $data) {
+                    $this->importTheme($data);
+                })
+                ->visible(fn () => $themeManager->isImportExportEnabled()),
         ];
     }
 
@@ -370,5 +407,44 @@ class ThemeSettings extends Page implements HasForms
             ->title(__('filament-theme-switcher::theme-switcher.duplicated'))
             ->success()
             ->send();
+    }
+
+    public function importTheme(array $data): void
+    {
+        $themeManager = app(ThemeManager::class);
+
+        if (!isset($data['theme_file'])) {
+            Notification::make()
+                ->title(__('filament-theme-switcher::theme-switcher.import_error'))
+                ->danger()
+                ->send();
+            return;
+        }
+
+        try {
+            $filePath = storage_path('app/public/' . $data['theme_file']);
+            $json = file_get_contents($filePath);
+            $themeData = json_decode($json, true);
+
+            if ($themeManager->importTheme($themeData)) {
+                Notification::make()
+                    ->title(__('filament-theme-switcher::theme-switcher.imported'))
+                    ->success()
+                    ->send();
+
+                $this->redirect(request()->header('Referer'));
+            } else {
+                Notification::make()
+                    ->title(__('filament-theme-switcher::theme-switcher.import_error'))
+                    ->danger()
+                    ->send();
+            }
+        } catch (\Exception $e) {
+            Notification::make()
+                ->title(__('filament-theme-switcher::theme-switcher.import_error'))
+                ->body($e->getMessage())
+                ->danger()
+                ->send();
+        }
     }
 }

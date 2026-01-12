@@ -71,4 +71,10 @@ return [
     'palette_analogous' => 'Analogous (adjacent)',
     'palette_triadic' => 'Triadic (triangle)',
     'palette_split' => 'Split Complementary',
+
+    // CSS Validation
+    'css_validation_error' => 'CSS Validation Error',
+
+    // Import
+    'import_file' => 'Theme File (JSON)',
 ];
