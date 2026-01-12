@@ -161,11 +161,24 @@ class ThemeBuilder extends Component
         $preset = BrandManager::getPreset($presetName);
         
         if ($preset) {
-            $this->brand['login_style'] = $preset['login_style'] ?? 'centered';
-            $this->brand['show_app_name'] = $preset['show_app_name'] ?? true;
+            $this->brand = array_merge($this->brand, [
+                'login_style' => $preset['login_style'] ?? 'centered',
+                'show_app_name' => $preset['show_app_name'] ?? true,
+            ]);
             $this->saveToHistory();
-            $this->dispatch('brand-preset-applied', preset: $presetName);
         }
+    }
+
+    public function setLoginStyle(string $style): void
+    {
+        $this->brand['login_style'] = $style;
+        $this->saveToHistory();
+    }
+
+    public function toggleShowAppName(): void
+    {
+        $this->brand['show_app_name'] = !$this->brand['show_app_name'];
+        $this->saveToHistory();
     }
 
     public function setPreviewMode(string $mode): void
@@ -285,6 +298,14 @@ class ThemeBuilder extends Component
             $themeManager->getDarkMode(),
             $generatedCss
         );
+        
+        // Store branding in cookie (persists after logout for login page styles)
+        $brandingCookie = json_encode([
+            'login_style' => $this->brand['login_style'],
+            'show_app_name' => $this->brand['show_app_name'],
+            'css' => $generatedCss,
+        ]);
+        cookie()->queue('filament_branding', $brandingCookie, 60 * 24 * 365); // 1 year
         
         // Force session save before reload
         session()->save();

@@ -179,11 +179,12 @@
                         <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                             Login Page Style
                         </label>
-                        <div class="grid grid-cols-2 gap-2">
+                        <div class="space-y-2">
                             @foreach(['centered', 'split', 'fullscreen', 'gradient'] as $style)
                                 <button
-                                    wire:click="$set('brand.login_style', '{{ $style }}')"
-                                    class="p-3 rounded-lg border text-sm text-left transition {{ $brand['login_style'] === $style ? 'border-primary-500 bg-primary-50 dark:bg-primary-900/20' : 'border-gray-200 dark:border-gray-700 hover:border-gray-300' }}"
+                                    type="button"
+                                    wire:click="setLoginStyle('{{ $style }}')"
+                                    class="w-full p-3 rounded-lg border text-sm text-left transition {{ $brand['login_style'] === $style ? 'border-primary-500 bg-primary-50 dark:bg-primary-900/20' : 'border-gray-200 dark:border-gray-700 hover:border-gray-300' }}"
                                 >
                                     {{ ucfirst($style) }}
                                 </button>
@@ -197,7 +198,8 @@
                             Show App Name
                         </label>
                         <button
-                            wire:click="$toggle('brand.show_app_name')"
+                            type="button"
+                            wire:click="toggleShowAppName"
                             class="relative inline-flex h-6 w-11 items-center rounded-full transition {{ $brand['show_app_name'] ? 'bg-primary-600' : 'bg-gray-200 dark:bg-gray-700' }}"
                         >
                             <span class="inline-block h-4 w-4 transform rounded-full bg-white transition {{ $brand['show_app_name'] ? 'translate-x-6' : 'translate-x-1' }}"></span>
