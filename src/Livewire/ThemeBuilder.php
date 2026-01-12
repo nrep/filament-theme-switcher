@@ -340,6 +340,28 @@ class ThemeBuilder extends Component
         if (!empty($this->spacing['sidebar_width'])) {
             $css .= ":root { --sidebar-width: {$this->spacing['sidebar_width']}px; }\n";
         }
+        if (!empty($this->spacing['content_padding'])) {
+            $css .= ".fi-main { padding: {$this->spacing['content_padding']}px; }\n";
+        }
+        
+        // Branding - Login page styles
+        $loginStyle = $this->brand['login_style'] ?? 'centered';
+        $primaryColor = $this->colors['primary'] ?? '#3b82f6';
+        
+        if ($loginStyle === 'gradient') {
+            $css .= ".fi-simple-layout { background: linear-gradient(135deg, {$primaryColor} 0%, color-mix(in srgb, {$primaryColor} 70%, #6366f1) 100%); }\n";
+        } elseif ($loginStyle === 'split') {
+            $css .= ".fi-simple-layout { display: grid; grid-template-columns: 1fr 1fr; }\n";
+            $css .= ".fi-simple-layout::before { content: ''; background: linear-gradient(135deg, {$primaryColor}, color-mix(in srgb, {$primaryColor} 50%, black)); }\n";
+        } elseif ($loginStyle === 'fullscreen') {
+            $css .= ".fi-simple-layout { background-size: cover; background-position: center; }\n";
+            $css .= ".fi-simple-main { backdrop-filter: blur(10px); background: rgba(255,255,255,0.9); }\n";
+        }
+        
+        // Show/hide app name in sidebar
+        if (isset($this->brand['show_app_name']) && !$this->brand['show_app_name']) {
+            $css .= ".fi-sidebar-header-heading { display: none; }\n";
+        }
         
         return $css;
     }
