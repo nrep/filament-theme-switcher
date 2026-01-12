@@ -52,7 +52,7 @@ Transform the basic theme switcher into a premium Filament plugin with advanced 
 - [x] **DM-001**: Add dark mode toggle to theme settings
 - [x] **DM-002**: Create dark mode variants for all built-in themes
 - [x] **DM-003**: Implement system preference detection (prefers-color-scheme)
-- [ ] **DM-004**: Add scheduled dark mode (sunset/sunrise based on timezone)
+- [x] **DM-004**: Add scheduled dark mode (sunset/sunrise based on timezone)
 - [x] **DM-005**: Per-user dark mode preference storage
 - [x] **DM-006**: Add dark mode toggle to Livewire switcher component
 
@@ -60,29 +60,29 @@ Transform the basic theme switcher into a premium Filament plugin with advanced 
 > Priority: High | Effort: Medium
 
 - [x] **CSS-001**: Add custom CSS field to theme settings
-- [ ] **CSS-002**: Create CSS editor with syntax highlighting (CodeMirror/Monaco)
-- [ ] **CSS-003**: Implement CSS scoping to prevent conflicts
-- [ ] **CSS-004**: Add CSS validation before saving
-- [ ] **CSS-005**: Create preset CSS snippets library
+- [x] **CSS-002**: Create CSS editor with syntax highlighting (CodeMirror/Monaco)
+- [x] **CSS-003**: Implement CSS scoping to prevent conflicts
+- [x] **CSS-004**: Add CSS validation before saving
+- [x] **CSS-005**: Create preset CSS snippets library
 
 ### Milestone: Theme Import/Export
 > Priority: Medium | Effort: Low
 
 - [x] **IE-001**: Create theme export to JSON functionality
 - [x] **IE-002**: Create theme import from JSON functionality
-- [ ] **IE-003**: Add theme duplication feature
+- [x] **IE-003**: Add theme duplication feature
 - [x] **IE-004**: Validate imported theme structure
 
 ### Milestone: Enhanced Color System
 > Priority: Medium | Effort: Medium
 
 - [x] **EC-001**: Add all Filament color slots (primary, secondary, danger, warning, success, info, gray)
-- [ ] **EC-002**: Add gradient support for primary colors
+- [x] **EC-002**: Add gradient support for primary colors
 - [x] **EC-003**: Create color palette generator (complementary, analogous, triadic)
 - [x] **EC-004**: Add color history/favorites
 
 ### v2.0 Release Checklist
-- [ ] All milestone tasks completed
+- [x] All milestone tasks completed
 - [ ] Unit tests written (80%+ coverage)
 - [ ] Documentation updated
 - [ ] Migration guide from v1.x
@@ -260,6 +260,11 @@ Transform the basic theme switcher into a premium Filament plugin with advanced 
   - Added dark mode toggle to Livewire switcher dropdown
   - Added ColorPaletteGenerator support class
   - Added color history and favorites functionality
+  - Added CssSnippets library with validation and scoping
+  - Added gradient support to ColorPaletteGenerator
+  - Added theme duplication feature
+  - Added scheduled dark mode with time-based activation
+  - **All v2.0 milestone tasks completed!**
 
 ### 2026-01-11
 - Released v1.0.0 (initial release)

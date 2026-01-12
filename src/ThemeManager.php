@@ -405,4 +405,102 @@ class ThemeManager
 
         return $isFavorite;
     }
+
+    public function duplicateTheme(?string $newName = null): array
+    {
+        $currentTheme = $this->exportTheme();
+        $currentTheme['duplicated_from'] = $currentTheme['theme'];
+        $currentTheme['duplicated_at'] = now()->toIso8601String();
+        
+        if ($newName) {
+            $currentTheme['custom_name'] = $newName;
+        }
+        
+        return $currentTheme;
+    }
+
+    public function getScheduledDarkModeSettings(): array
+    {
+        $plugin = $this->getPlugin();
+
+        if ($plugin?->isUserMode() && auth()->check()) {
+            $userTheme = UserTheme::where('user_id', auth()->id())
+                ->where('panel_id', Filament::getCurrentPanel()?->getId())
+                ->first();
+
+            return $userTheme?->scheduled_dark_mode ?? [
+                'enabled' => false,
+                'start_time' => '18:00',
+                'end_time' => '06:00',
+                'use_sunset' => false,
+                'timezone' => config('app.timezone', 'UTC'),
+            ];
+        }
+
+        return Session::get('filament_scheduled_dark_mode', [
+            'enabled' => false,
+            'start_time' => '18:00',
+            'end_time' => '06:00',
+            'use_sunset' => false,
+            'timezone' => config('app.timezone', 'UTC'),
+        ]);
+    }
+
+    public function setScheduledDarkMode(array $settings): void
+    {
+        $plugin = $this->getPlugin();
+
+        if ($plugin?->isUserMode() && auth()->check()) {
+            UserTheme::updateOrCreate(
+                [
+                    'user_id' => auth()->id(),
+                    'panel_id' => Filament::getCurrentPanel()?->getId(),
+                ],
+                ['scheduled_dark_mode' => $settings]
+            );
+        } else {
+            Session::put('filament_scheduled_dark_mode', $settings);
+        }
+    }
+
+    public function shouldUseDarkModeNow(): bool
+    {
+        $darkMode = $this->getDarkMode();
+        
+        // If explicit light or dark, return accordingly
+        if ($darkMode === 'light') {
+            return false;
+        }
+        if ($darkMode === 'dark') {
+            return true;
+        }
+        
+        // Check scheduled dark mode
+        $schedule = $this->getScheduledDarkModeSettings();
+        
+        if ($schedule['enabled'] ?? false) {
+            $timezone = $schedule['timezone'] ?? config('app.timezone', 'UTC');
+            $now = now($timezone);
+            
+            $startTime = \Carbon\Carbon::parse($schedule['start_time'], $timezone);
+            $endTime = \Carbon\Carbon::parse($schedule['end_time'], $timezone);
+            
+            // Handle overnight schedule (e.g., 18:00 to 06:00)
+            if ($startTime > $endTime) {
+                // Dark mode is active if current time is after start OR before end
+                return $now->gte($startTime) || $now->lt($endTime);
+            } else {
+                // Dark mode is active if current time is between start and end
+                return $now->gte($startTime) && $now->lt($endTime);
+            }
+        }
+        
+        // Default to system preference (handled by frontend)
+        return false;
+    }
+
+    public function isScheduledDarkModeEnabled(): bool
+    {
+        return config('filament-theme-switcher.dark_mode.scheduled', false);
+    }
 }

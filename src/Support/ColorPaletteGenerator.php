@@ -270,4 +270,89 @@ class ColorPaletteGenerator
         if ($t < 2/3) return $p + ($q - $p) * (2/3 - $t) * 6;
         return $p;
     }
+
+    /**
+     * Generate a CSS gradient from two colors.
+     */
+    public static function gradient(string $color1, string $color2, string $direction = 'to right'): string
+    {
+        return "linear-gradient({$direction}, {$color1}, {$color2})";
+    }
+
+    /**
+     * Generate a gradient from a base color to its complementary.
+     */
+    public static function complementaryGradient(string $hexColor, string $direction = 'to right'): string
+    {
+        $colors = self::complementary($hexColor);
+        return self::gradient($colors['primary'], $colors['complementary'], $direction);
+    }
+
+    /**
+     * Generate a multi-stop gradient from analogous colors.
+     */
+    public static function analogousGradient(string $hexColor, string $direction = 'to right'): string
+    {
+        $colors = self::analogous($hexColor);
+        return "linear-gradient({$direction}, {$colors['analogous_left']}, {$colors['primary']}, {$colors['analogous_right']})";
+    }
+
+    /**
+     * Generate a rainbow gradient through triadic colors.
+     */
+    public static function triadicGradient(string $hexColor, string $direction = 'to right'): string
+    {
+        $colors = self::triadic($hexColor);
+        return "linear-gradient({$direction}, {$colors['primary']}, {$colors['triadic_1']}, {$colors['triadic_2']})";
+    }
+
+    /**
+     * Generate gradient presets for a color.
+     */
+    public static function gradientPresets(string $hexColor): array
+    {
+        $rgb = self::hexToRgb($hexColor);
+        $hsl = self::rgbToHsl($rgb['r'], $rgb['g'], $rgb['b']);
+        
+        // Lighter version
+        $lighterHsl = ['h' => $hsl['h'], 's' => $hsl['s'], 'l' => min(90, $hsl['l'] + 20)];
+        $lighterRgb = self::hslToRgb($lighterHsl['h'], $lighterHsl['s'], $lighterHsl['l']);
+        $lighter = self::rgbToHex($lighterRgb['r'], $lighterRgb['g'], $lighterRgb['b']);
+        
+        // Darker version
+        $darkerHsl = ['h' => $hsl['h'], 's' => $hsl['s'], 'l' => max(10, $hsl['l'] - 20)];
+        $darkerRgb = self::hslToRgb($darkerHsl['h'], $darkerHsl['s'], $darkerHsl['l']);
+        $darker = self::rgbToHex($darkerRgb['r'], $darkerRgb['g'], $darkerRgb['b']);
+        
+        return [
+            'subtle' => [
+                'name' => 'Subtle',
+                'css' => self::gradient($hexColor, $lighter),
+            ],
+            'bold' => [
+                'name' => 'Bold',
+                'css' => self::gradient($darker, $hexColor),
+            ],
+            'complementary' => [
+                'name' => 'Complementary',
+                'css' => self::complementaryGradient($hexColor),
+            ],
+            'analogous' => [
+                'name' => 'Analogous',
+                'css' => self::analogousGradient($hexColor),
+            ],
+            'triadic' => [
+                'name' => 'Triadic',
+                'css' => self::triadicGradient($hexColor),
+            ],
+            'radial' => [
+                'name' => 'Radial',
+                'css' => "radial-gradient(circle, {$lighter}, {$hexColor})",
+            ],
+            'diagonal' => [
+                'name' => 'Diagonal',
+                'css' => self::gradient($hexColor, $lighter, 'to bottom right'),
+            ],
+        ];
+    }
 }

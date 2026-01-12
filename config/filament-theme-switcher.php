@@ -63,6 +63,11 @@ return [
         'enabled' => true,
         'default' => 'system',
         'toggle_in_header' => true,
+        'scheduled' => true,
+        'schedule_defaults' => [
+            'start_time' => '18:00',
+            'end_time' => '06:00',
+        ],
     ],
 
     /*
