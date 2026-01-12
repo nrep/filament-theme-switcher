@@ -96,4 +96,13 @@ return [
     'content_padding' => 'Content Padding',
     'apply_theme' => 'Apply Theme',
     'live_preview' => 'Live Preview',
+
+    // Font Customization
+    'typography' => 'Typography',
+    'heading_font' => 'Heading Font',
+    'body_font' => 'Body Font',
+    'mono_font' => 'Monospace Font',
+    'font_weight' => 'Weight',
+    'font_size' => 'Size',
+    'font_preview_text' => 'The quick brown fox jumps over the lazy dog.',
 ];

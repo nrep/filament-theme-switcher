@@ -4,6 +4,7 @@ namespace Isura\FilamentThemeSwitcher\Livewire;
 
 use Filament\Facades\Filament;
 use Isura\FilamentThemeSwitcher\Support\ColorPaletteGenerator;
+use Isura\FilamentThemeSwitcher\Support\FontManager;
 use Isura\FilamentThemeSwitcher\ThemeManager;
 use Livewire\Attributes\On;
 use Livewire\Component;
@@ -54,6 +55,12 @@ class ThemeBuilder extends Component
 
     public string $customCss = '';
 
+    public array $fonts = [
+        'heading' => ['family' => 'Inter', 'weight' => 600, 'size' => 'default'],
+        'body' => ['family' => 'Inter', 'weight' => 400, 'size' => 'default'],
+        'mono' => ['family' => 'JetBrains Mono', 'weight' => 400, 'size' => 'default'],
+    ];
+
     public function mount(): void
     {
         $themeManager = app(ThemeManager::class);
@@ -89,6 +96,33 @@ class ThemeBuilder extends Component
         $this->spacing[$property] = $value;
         $this->saveToHistory();
         $this->dispatch('theme-preview-updated', spacing: $this->spacing);
+    }
+
+    public function updateFont(string $type, string $property, mixed $value): void
+    {
+        $this->fonts[$type][$property] = $value;
+        $this->saveToHistory();
+        $this->dispatch('theme-preview-updated', fonts: $this->fonts);
+    }
+
+    public function getAvailableFonts(): array
+    {
+        return FontManager::getSansSerifFonts();
+    }
+
+    public function getMonoFonts(): array
+    {
+        return FontManager::getMonospaceFonts();
+    }
+
+    public function getFontWeights(string $fontName): array
+    {
+        return FontManager::getFontWeights($fontName);
+    }
+
+    public function getFontSizes(): array
+    {
+        return FontManager::getFontSizes();
     }
 
     public function setPreviewMode(string $mode): void
@@ -203,6 +237,12 @@ class ThemeBuilder extends Component
     public function generateComponentCss(): string
     {
         $css = $this->customCss ? $this->customCss . "\n\n" : '';
+        
+        // Font styles
+        $fontCss = FontManager::generateFontCSS($this->fonts);
+        if ($fontCss) {
+            $css .= $fontCss . "\n";
+        }
         
         // Sidebar styles
         if (!empty($this->components['sidebar']['background'])) {

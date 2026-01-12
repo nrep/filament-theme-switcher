@@ -157,6 +157,73 @@
                 </div>
             </div>
 
+            {{-- Typography Section --}}
+            <div class="bg-white dark:bg-gray-900 rounded-xl p-4 shadow-sm border border-gray-200 dark:border-gray-700">
+                <h3 class="text-lg font-semibold mb-4 text-gray-900 dark:text-white">
+                    {{ __('filament-theme-switcher::theme-switcher.typography') }}
+                </h3>
+                
+                @php
+                    $availableFonts = \Isura\FilamentThemeSwitcher\Support\FontManager::getSansSerifFonts();
+                    $monoFonts = \Isura\FilamentThemeSwitcher\Support\FontManager::getMonospaceFonts();
+                    $fontSizes = \Isura\FilamentThemeSwitcher\Support\FontManager::getFontSizes();
+                @endphp
+
+                <div class="space-y-4">
+                    {{-- Heading Font --}}
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                            {{ __('filament-theme-switcher::theme-switcher.heading_font') }}
+                        </label>
+                        <select wire:model.live="fonts.heading.family" class="w-full text-sm rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 p-2">
+                            @foreach($availableFonts as $name => $data)
+                                <option value="{{ $name }}">{{ $name }}</option>
+                            @endforeach
+                        </select>
+                        <div class="mt-2 p-3 bg-gray-50 dark:bg-gray-800 rounded" style="font-family: '{{ $fonts['heading']['family'] }}', sans-serif; font-weight: {{ $fonts['heading']['weight'] }};">
+                            <span class="text-lg">{{ __('filament-theme-switcher::theme-switcher.font_preview_text') }}</span>
+                        </div>
+                    </div>
+
+                    {{-- Body Font --}}
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                            {{ __('filament-theme-switcher::theme-switcher.body_font') }}
+                        </label>
+                        <div class="grid grid-cols-2 gap-2">
+                            <select wire:model.live="fonts.body.family" class="w-full text-sm rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 p-2">
+                                @foreach($availableFonts as $name => $data)
+                                    <option value="{{ $name }}">{{ $name }}</option>
+                                @endforeach
+                            </select>
+                            <select wire:model.live="fonts.body.size" class="w-full text-sm rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 p-2">
+                                @foreach($fontSizes as $key => $size)
+                                    <option value="{{ $key }}">{{ $size['label'] }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="mt-2 p-3 bg-gray-50 dark:bg-gray-800 rounded" style="font-family: '{{ $fonts['body']['family'] }}', sans-serif;">
+                            <span>{{ __('filament-theme-switcher::theme-switcher.font_preview_text') }}</span>
+                        </div>
+                    </div>
+
+                    {{-- Mono Font --}}
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                            {{ __('filament-theme-switcher::theme-switcher.mono_font') }}
+                        </label>
+                        <select wire:model.live="fonts.mono.family" class="w-full text-sm rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 p-2">
+                            @foreach($monoFonts as $name => $data)
+                                <option value="{{ $name }}">{{ $name }}</option>
+                            @endforeach
+                        </select>
+                        <div class="mt-2 p-3 bg-gray-50 dark:bg-gray-800 rounded font-mono" style="font-family: '{{ $fonts['mono']['family'] }}', monospace;">
+                            <code>const theme = "awesome";</code>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             {{-- Actions --}}
             <div class="flex gap-3">
                 <button 
