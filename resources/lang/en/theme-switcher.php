@@ -163,4 +163,22 @@ return [
     'check_updates' => 'Check for Updates',
     'updates_available' => 'Updates Available',
     'no_updates' => 'All themes up to date',
+
+    // Analytics Dashboard
+    'analytics' => 'Theme Analytics',
+    'total_views' => 'Total Views',
+    'unique_users' => 'Unique Users',
+    'popular_themes' => 'Popular Themes',
+    'usage_stats' => 'Usage Statistics',
+    'last_7_days' => 'Last 7 Days',
+    'last_30_days' => 'Last 30 Days',
+    'ab_testing' => 'A/B Testing',
+    'create_test' => 'Create Test',
+    'test_results' => 'Test Results',
+    'impressions' => 'Impressions',
+    'conversions' => 'Conversions',
+    'conversion_rate' => 'Conversion Rate',
+    'end_test' => 'End Test',
+    'test_running' => 'Running',
+    'test_completed' => 'Completed',
 ];
