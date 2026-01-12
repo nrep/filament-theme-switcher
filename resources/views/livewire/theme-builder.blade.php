@@ -5,14 +5,14 @@
             {{-- Header with Undo/Redo --}}
             <div class="flex items-center justify-between">
                 <h2 class="text-xl font-bold text-gray-900 dark:text-white">
-                    {{ __('filament-theme-switcher::theme-switcher.theme_builder') }}
+                    Theme Builder
                 </h2>
                 <div class="flex items-center gap-2">
                     <button 
                         wire:click="undo" 
                         @disabled(!$this->canUndo())
                         class="p-2 rounded-lg bg-gray-100 dark:bg-gray-800 disabled:opacity-50"
-                        title="{{ __('filament-theme-switcher::theme-switcher.undo') }}"
+                        title="Undo"
                     >
                         <x-heroicon-o-arrow-uturn-left class="w-5 h-5" />
                     </button>
@@ -20,7 +20,7 @@
                         wire:click="redo" 
                         @disabled(!$this->canRedo())
                         class="p-2 rounded-lg bg-gray-100 dark:bg-gray-800 disabled:opacity-50"
-                        title="{{ __('filament-theme-switcher::theme-switcher.redo') }}"
+                        title="Redo"
                     >
                         <x-heroicon-o-arrow-uturn-right class="w-5 h-5" />
                     </button>
@@ -30,23 +30,23 @@
             {{-- Color Palette Section --}}
             <div class="bg-white dark:bg-gray-900 rounded-xl p-4 shadow-sm border border-gray-200 dark:border-gray-700">
                 <h3 class="text-lg font-semibold mb-4 text-gray-900 dark:text-white">
-                    {{ __('filament-theme-switcher::theme-switcher.colors') }}
+                    Colors
                 </h3>
                 
                 {{-- Palette Generator --}}
                 <div class="mb-4">
                     <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                        {{ __('filament-theme-switcher::theme-switcher.generate_palette') }}
+                        Generate Palette
                     </label>
                     <div class="flex gap-2 flex-wrap">
                         <button wire:click="generatePalette('complementary')" class="px-3 py-1 text-xs rounded-full bg-gray-100 dark:bg-gray-800 hover:bg-gray-200">
-                            {{ __('filament-theme-switcher::theme-switcher.palette_complementary') }}
+                            Complementary (opposite)
                         </button>
                         <button wire:click="generatePalette('analogous')" class="px-3 py-1 text-xs rounded-full bg-gray-100 dark:bg-gray-800 hover:bg-gray-200">
-                            {{ __('filament-theme-switcher::theme-switcher.palette_analogous') }}
+                            Analogous (adjacent)
                         </button>
                         <button wire:click="generatePalette('triadic')" class="px-3 py-1 text-xs rounded-full bg-gray-100 dark:bg-gray-800 hover:bg-gray-200">
-                            {{ __('filament-theme-switcher::theme-switcher.palette_triadic') }}
+                            Triadic (triangle)
                         </button>
                     </div>
                 </div>
@@ -90,21 +90,21 @@
             {{-- Component Styling Section --}}
             <div class="bg-white dark:bg-gray-900 rounded-xl p-4 shadow-sm border border-gray-200 dark:border-gray-700">
                 <h3 class="text-lg font-semibold mb-4 text-gray-900 dark:text-white">
-                    {{ __('filament-theme-switcher::theme-switcher.component_styles') }}
+                    Component Styles
                 </h3>
 
                 {{-- Sidebar --}}
                 <div class="mb-4">
                     <h4 class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                        {{ __('filament-theme-switcher::theme-switcher.sidebar') }}
+                        Sidebar
                     </h4>
                     <div class="grid grid-cols-2 gap-2">
                         <div>
-                            <label class="text-xs text-gray-500">{{ __('filament-theme-switcher::theme-switcher.background') }}</label>
+                            <label class="text-xs text-gray-500">Background</label>
                             <input type="color" wire:model.live="components.sidebar.background" class="w-full h-8 rounded cursor-pointer">
                         </div>
                         <div>
-                            <label class="text-xs text-gray-500">{{ __('filament-theme-switcher::theme-switcher.border_radius') }}</label>
+                            <label class="text-xs text-gray-500">Border Radius</label>
                             <input type="range" min="0" max="16" wire:model.live="components.sidebar.border_radius" class="w-full">
                         </div>
                     </div>
@@ -113,16 +113,16 @@
                 {{-- Cards --}}
                 <div class="mb-4">
                     <h4 class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                        {{ __('filament-theme-switcher::theme-switcher.cards') }}
+                        Cards
                     </h4>
                     <div class="grid grid-cols-2 gap-2">
                         <div>
-                            <label class="text-xs text-gray-500">{{ __('filament-theme-switcher::theme-switcher.border_radius') }}</label>
+                            <label class="text-xs text-gray-500">Border Radius</label>
                             <input type="range" min="0" max="24" wire:model.live="components.cards.border_radius" class="w-full">
                             <span class="text-xs text-gray-400">{{ $components['cards']['border_radius'] }}px</span>
                         </div>
                         <div>
-                            <label class="text-xs text-gray-500">{{ __('filament-theme-switcher::theme-switcher.shadow') }}</label>
+                            <label class="text-xs text-gray-500">Shadow</label>
                             <select wire:model.live="components.cards.shadow" class="w-full text-sm rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800">
                                 <option value="none">None</option>
                                 <option value="sm">Small</option>
@@ -136,10 +136,10 @@
                 {{-- Buttons --}}
                 <div>
                     <h4 class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                        {{ __('filament-theme-switcher::theme-switcher.buttons') }}
+                        Buttons
                     </h4>
                     <div>
-                        <label class="text-xs text-gray-500">{{ __('filament-theme-switcher::theme-switcher.border_radius') }}</label>
+                        <label class="text-xs text-gray-500">Border Radius</label>
                         <input type="range" min="0" max="9999" wire:model.live="components.buttons.border_radius" class="w-full">
                         <span class="text-xs text-gray-400">{{ $components['buttons']['border_radius'] == '9999' ? 'Pill' : $components['buttons']['border_radius'] . 'px' }}</span>
                     </div>
@@ -149,18 +149,18 @@
             {{-- Spacing Section --}}
             <div class="bg-white dark:bg-gray-900 rounded-xl p-4 shadow-sm border border-gray-200 dark:border-gray-700">
                 <h3 class="text-lg font-semibold mb-4 text-gray-900 dark:text-white">
-                    {{ __('filament-theme-switcher::theme-switcher.spacing') }}
+                    Spacing
                 </h3>
                 <div class="space-y-3">
                     <div>
                         <label class="text-sm text-gray-700 dark:text-gray-300">
-                            {{ __('filament-theme-switcher::theme-switcher.sidebar_width') }}: {{ $spacing['sidebar_width'] }}px
+                            Sidebar Width: {{ $spacing['sidebar_width'] }}px
                         </label>
                         <input type="range" min="200" max="400" wire:model.live="spacing.sidebar_width" class="w-full">
                     </div>
                     <div>
                         <label class="text-sm text-gray-700 dark:text-gray-300">
-                            {{ __('filament-theme-switcher::theme-switcher.content_padding') }}: {{ $spacing['content_padding'] }}px
+                            Content Padding: {{ $spacing['content_padding'] }}px
                         </label>
                         <input type="range" min="8" max="32" wire:model.live="spacing.content_padding" class="w-full">
                     </div>
@@ -170,14 +170,14 @@
             {{-- Branding Section --}}
             <div class="bg-white dark:bg-gray-900 rounded-xl p-4 shadow-sm border border-gray-200 dark:border-gray-700">
                 <h3 class="text-lg font-semibold mb-4 text-gray-900 dark:text-white">
-                    {{ __('filament-theme-switcher::theme-switcher.branding') }}
+                    Branding
                 </h3>
 
                 <div class="space-y-4">
                     {{-- Login Style --}}
                     <div>
                         <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                            {{ __('filament-theme-switcher::theme-switcher.login_style') }}
+                            Login Page Style
                         </label>
                         <div class="grid grid-cols-2 gap-2">
                             @foreach(['centered', 'split', 'fullscreen', 'gradient'] as $style)
@@ -185,7 +185,7 @@
                                     wire:click="$set('brand.login_style', '{{ $style }}')"
                                     class="p-3 rounded-lg border text-sm text-left transition {{ $brand['login_style'] === $style ? 'border-primary-500 bg-primary-50 dark:bg-primary-900/20' : 'border-gray-200 dark:border-gray-700 hover:border-gray-300' }}"
                                 >
-                                    {{ __('filament-theme-switcher::theme-switcher.login_' . $style) }}
+                                    {{ ucfirst($style) }}
                                 </button>
                             @endforeach
                         </div>
@@ -194,7 +194,7 @@
                     {{-- Show App Name Toggle --}}
                     <div class="flex items-center justify-between">
                         <label class="text-sm font-medium text-gray-700 dark:text-gray-300">
-                            {{ __('filament-theme-switcher::theme-switcher.show_app_name') }}
+                            Show App Name
                         </label>
                         <button
                             wire:click="$toggle('brand.show_app_name')"
@@ -207,7 +207,7 @@
                     {{-- Brand Presets --}}
                     <div>
                         <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                            {{ __('filament-theme-switcher::theme-switcher.brand_presets') }}
+                            Brand Presets
                         </label>
                         <div class="grid grid-cols-2 gap-2">
                             @php $presets = \Isura\FilamentThemeSwitcher\Support\BrandManager::getPresets(); @endphp
@@ -228,7 +228,7 @@
             {{-- Typography Section --}}
             <div class="bg-white dark:bg-gray-900 rounded-xl p-4 shadow-sm border border-gray-200 dark:border-gray-700">
                 <h3 class="text-lg font-semibold mb-4 text-gray-900 dark:text-white">
-                    {{ __('filament-theme-switcher::theme-switcher.typography') }}
+                    Typography
                 </h3>
                 
                 @php
@@ -241,7 +241,7 @@
                     {{-- Heading Font --}}
                     <div>
                         <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                            {{ __('filament-theme-switcher::theme-switcher.heading_font') }}
+                            Heading Font
                         </label>
                         <select wire:model.live="fonts.heading.family" class="w-full text-sm rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 p-2">
                             @foreach($availableFonts as $name => $data)
@@ -249,14 +249,14 @@
                             @endforeach
                         </select>
                         <div class="mt-2 p-3 bg-gray-50 dark:bg-gray-800 rounded" style="font-family: '{{ $fonts['heading']['family'] }}', sans-serif; font-weight: {{ $fonts['heading']['weight'] }};">
-                            <span class="text-lg">{{ __('filament-theme-switcher::theme-switcher.font_preview_text') }}</span>
+                            <span class="text-lg">The quick brown fox jumps over the lazy dog.</span>
                         </div>
                     </div>
 
                     {{-- Body Font --}}
                     <div>
                         <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                            {{ __('filament-theme-switcher::theme-switcher.body_font') }}
+                            Body Font
                         </label>
                         <div class="grid grid-cols-2 gap-2">
                             <select wire:model.live="fonts.body.family" class="w-full text-sm rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 p-2">
@@ -271,14 +271,14 @@
                             </select>
                         </div>
                         <div class="mt-2 p-3 bg-gray-50 dark:bg-gray-800 rounded" style="font-family: '{{ $fonts['body']['family'] }}', sans-serif;">
-                            <span>{{ __('filament-theme-switcher::theme-switcher.font_preview_text') }}</span>
+                            <span>The quick brown fox jumps over the lazy dog.</span>
                         </div>
                     </div>
 
                     {{-- Mono Font --}}
                     <div>
                         <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                            {{ __('filament-theme-switcher::theme-switcher.mono_font') }}
+                            Monospace Font
                         </label>
                         <select wire:model.live="fonts.mono.family" class="w-full text-sm rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 p-2">
                             @foreach($monoFonts as $name => $data)
@@ -298,13 +298,13 @@
                     wire:click="applyTheme"
                     class="flex-1 px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition"
                 >
-                    {{ __('filament-theme-switcher::theme-switcher.apply_theme') }}
+                    Apply Theme
                 </button>
                 <button 
                     wire:click="resetToDefault"
                     class="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-300 transition"
                 >
-                    {{ __('filament-theme-switcher::theme-switcher.reset') }}
+                    Reset to Default
                 </button>
             </div>
         </div>
@@ -315,7 +315,7 @@
                 {{-- Preview Mode Toggle --}}
                 <div class="flex items-center justify-between mb-4">
                     <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
-                        {{ __('filament-theme-switcher::theme-switcher.live_preview') }}
+                        Live Preview
                     </h3>
                     <div class="flex items-center gap-2 bg-gray-100 dark:bg-gray-800 rounded-lg p-1">
                         <button 
