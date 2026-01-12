@@ -274,9 +274,17 @@ class ThemeManager
                 return $this->customCss;
             }
         } else {
+            // First try session
             $css = Session::get('filament_custom_css');
             if ($css) {
                 $this->customCss = $css;
+                return $this->customCss;
+            }
+            
+            // Fallback to cached branding file (for login page when not authenticated)
+            $brandingCssPath = storage_path('app/filament-theme-branding.css');
+            if (file_exists($brandingCssPath)) {
+                $this->customCss = file_get_contents($brandingCssPath);
                 return $this->customCss;
             }
         }

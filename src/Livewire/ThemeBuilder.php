@@ -299,13 +299,9 @@ class ThemeBuilder extends Component
             $generatedCss
         );
         
-        // Store branding in cookie (persists after logout for login page styles)
-        $brandingCookie = json_encode([
-            'login_style' => $this->brand['login_style'],
-            'show_app_name' => $this->brand['show_app_name'],
-            'css' => $generatedCss,
-        ]);
-        cookie()->queue('filament_branding', $brandingCookie, 60 * 24 * 365); // 1 year
+        // Store branding CSS in a file (persists after logout for login page styles)
+        $brandingCssPath = storage_path('app/filament-theme-branding.css');
+        file_put_contents($brandingCssPath, $generatedCss);
         
         // Force session save before reload
         session()->save();
