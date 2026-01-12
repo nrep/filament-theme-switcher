@@ -387,8 +387,6 @@ class ThemeBuilder extends Component
                 position: relative !important;
                 min-height: 100vh !important;
                 background: white !important;
-                display: flex !important;
-                justify-content: flex-end !important;
             }\n";
             $css .= ".fi-simple-layout::before { 
                 content: 'Welcome Back';
@@ -405,15 +403,19 @@ class ThemeBuilder extends Component
                 font-weight: 700 !important;
                 color: white !important;
                 letter-spacing: -0.025em !important;
+                z-index: 10 !important;
             }\n";
             $css .= ".fi-simple-layout > .fi-simple-main-ctn {
                 width: 50% !important;
+                margin-left: 50% !important;
                 min-height: 100vh !important;
                 display: flex !important;
                 align-items: center !important;
                 justify-content: center !important;
                 padding: 2rem !important;
                 background: white !important;
+                position: relative !important;
+                z-index: 20 !important;
             }\n";
             $css .= ".fi-simple-main {
                 width: 100% !important;
@@ -424,8 +426,7 @@ class ThemeBuilder extends Component
             $css .= ".dark .fi-simple-layout::before { color: rgba(255,255,255,0.9) !important; }\n";
             $css .= "@media (max-width: 1024px) { 
                 .fi-simple-layout::before { display: none !important; }
-                .fi-simple-layout { justify-content: center !important; }
-                .fi-simple-layout > .fi-simple-main-ctn { width: 100% !important; }
+                .fi-simple-layout > .fi-simple-main-ctn { width: 100% !important; margin-left: 0 !important; }
             }\n";
         } elseif ($loginStyle === 'fullscreen') {
             // Subtle background tint with clean card
