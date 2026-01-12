@@ -119,6 +119,116 @@ class ThemeManager
         $this->customCss = $customCss;
     }
 
+    public function setThemeBuilderState(array $state): void
+    {
+        $plugin = $this->getPlugin();
+
+        if ($plugin?->isUserMode() && auth()->check()) {
+            UserTheme::updateOrCreate(
+                [
+                    'user_id' => auth()->id(),
+                    'panel_id' => Filament::getCurrentPanel()?->getId(),
+                ],
+                [
+                    'theme' => $state['theme'] ?? $this->getCurrentTheme() ?? 'default',
+                    'colors' => $state['colors'] ?? null,
+                    'dark_mode' => $state['dark_mode'] ?? $this->getDarkMode(),
+                    'custom_css' => $state['custom_css'] ?? null,
+                    'fonts' => $state['fonts'] ?? null,
+                    'components' => $state['components'] ?? null,
+                    'spacing' => $state['spacing'] ?? null,
+                    'brand' => $state['brand'] ?? null,
+                ]
+            );
+        } else {
+            Session::put('filament_theme_builder_state', $state);
+            
+            if (isset($state['theme'])) {
+                Session::put('filament_theme', $state['theme']);
+            }
+            if (isset($state['colors'])) {
+                Session::put('filament_theme_colors', $state['colors']);
+            }
+            if (isset($state['dark_mode'])) {
+                Session::put('filament_dark_mode', $state['dark_mode']);
+            }
+            if (isset($state['custom_css'])) {
+                Session::put('filament_custom_css', $state['custom_css']);
+            }
+        }
+
+        $this->currentTheme = $state['theme'] ?? $this->currentTheme;
+        $this->currentColors = $state['colors'] ?? $this->currentColors;
+        $this->darkMode = $state['dark_mode'] ?? $this->darkMode;
+        $this->customCss = $state['custom_css'] ?? $this->customCss;
+    }
+
+    public function getThemeBuilderState(): array
+    {
+        $plugin = $this->getPlugin();
+        
+        $defaultState = [
+            'colors' => [
+                'primary' => '#3b82f6',
+                'danger' => '#ef4444',
+                'success' => '#22c55e',
+                'warning' => '#f59e0b',
+                'info' => '#06b6d4',
+                'gray' => '#6b7280',
+            ],
+            'fonts' => [
+                'heading' => ['family' => 'Inter', 'weight' => 600, 'size' => 'default'],
+                'body' => ['family' => 'Inter', 'weight' => 400, 'size' => 'default'],
+                'mono' => ['family' => 'JetBrains Mono', 'weight' => 400, 'size' => 'default'],
+            ],
+            'components' => [
+                'sidebar' => ['background' => '', 'text_color' => '', 'border_radius' => '0'],
+                'header' => ['background' => '', 'text_color' => '', 'sticky' => true],
+                'cards' => ['background' => '', 'border_radius' => '8', 'shadow' => 'md'],
+                'buttons' => ['border_radius' => '6', 'shadow' => 'sm'],
+            ],
+            'spacing' => [
+                'content_padding' => '16',
+                'card_padding' => '16',
+                'sidebar_width' => '280',
+            ],
+            'brand' => [
+                'logo' => null,
+                'logo_dark' => null,
+                'favicon' => null,
+                'login_style' => 'centered',
+                'login_background' => null,
+                'show_app_name' => true,
+            ],
+            'custom_css' => '',
+        ];
+
+        if ($plugin?->isUserMode() && auth()->check()) {
+            $userTheme = UserTheme::where('user_id', auth()->id())
+                ->where('panel_id', Filament::getCurrentPanel()?->getId())
+                ->first();
+
+            if ($userTheme) {
+                return [
+                    'colors' => $userTheme->colors ? array_merge($defaultState['colors'], $userTheme->colors) : $defaultState['colors'],
+                    'fonts' => $userTheme->fonts ? array_merge($defaultState['fonts'], $userTheme->fonts) : $defaultState['fonts'],
+                    'components' => $userTheme->components ? array_merge($defaultState['components'], $userTheme->components) : $defaultState['components'],
+                    'spacing' => $userTheme->spacing ? array_merge($defaultState['spacing'], $userTheme->spacing) : $defaultState['spacing'],
+                    'brand' => $userTheme->brand ? array_merge($defaultState['brand'], $userTheme->brand) : $defaultState['brand'],
+                    'custom_css' => $userTheme->custom_css ?? '',
+                ];
+            }
+        }
+
+        // Fallback to session for global mode
+        $sessionState = Session::get('filament_theme_builder_state');
+        if ($sessionState && is_array($sessionState)) {
+            return array_merge($defaultState, $sessionState);
+        }
+
+        return $defaultState;
+    }
+
     public function getThemeInstance(?string $themeName = null): ?Theme
     {
         $themeName = $themeName ?? $this->getCurrentTheme();
