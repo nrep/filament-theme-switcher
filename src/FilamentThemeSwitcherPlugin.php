@@ -7,6 +7,8 @@ use Filament\Contracts\Plugin;
 use Filament\Panel;
 use Filament\Support\Colors\Color;
 use Filament\Support\Facades\FilamentColor;
+use Filament\View\PanelsRenderHook;
+use Illuminate\Support\Facades\Blade;
 use Isura\FilamentThemeSwitcher\Pages\ThemeSettings;
 use Isura\FilamentThemeSwitcher\Themes\DefaultTheme;
 
@@ -40,7 +42,11 @@ class FilamentThemeSwitcherPlugin implements Plugin
         $panel
             ->pages([
                 ThemeSettings::class,
-            ]);
+            ])
+            ->renderHook(
+                PanelsRenderHook::HEAD_END,
+                fn (): string => Blade::render('<x-filament-theme-switcher::custom-css />')
+            );
     }
 
     public function boot(Panel $panel): void

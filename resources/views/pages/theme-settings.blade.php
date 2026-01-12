@@ -42,4 +42,24 @@
             @endforeach
         </div>
     </div>
+    @push('scripts')
+    <script>
+        document.addEventListener('livewire:init', () => {
+            Livewire.on('download-theme', (event) => {
+                const json = event.json || event[0]?.json;
+                if (json) {
+                    const blob = new Blob([json], { type: 'application/json' });
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = 'theme-export.json';
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    URL.revokeObjectURL(url);
+                }
+            });
+        });
+    </script>
+    @endpush
 </x-filament-panels::page>
