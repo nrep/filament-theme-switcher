@@ -382,35 +382,50 @@ class ThemeBuilder extends Component
                 border: 1px solid rgba(255, 255, 255, 0.1) !important;
             }\n";
         } elseif ($loginStyle === 'split') {
-            // TALL-stack style split layout - gradient left, form right
+            // TALL-stack style split layout - branding left, form right
             $css .= ".fi-simple-layout { 
-                display: flex !important;
+                position: relative !important;
                 min-height: 100vh !important;
-                background: #f8fafc !important;
-            }\n";
-            $css .= ".fi-simple-layout > .fi-simple-main-ctn {
-                flex: 1;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                padding: 2rem;
-                order: 2;
+                background: white !important;
+                display: flex !important;
+                justify-content: flex-end !important;
             }\n";
             $css .= ".fi-simple-layout::before { 
-                content: '';
-                flex: 1;
-                order: 1;
-                background: linear-gradient(135deg, {$primaryColor} 0%, color-mix(in srgb, {$primaryColor} 40%, #1e1b4b) 100%);
-                display: block !important;
+                content: 'Welcome Back';
+                position: fixed !important;
+                left: 0 !important;
+                top: 0 !important;
+                width: 50% !important;
+                height: 100vh !important;
+                background: linear-gradient(135deg, {$primaryColor} 0%, color-mix(in srgb, {$primaryColor} 40%, #1e1b4b) 100%) !important;
+                display: flex !important;
+                align-items: center !important;
+                justify-content: center !important;
+                font-size: 3rem !important;
+                font-weight: 700 !important;
+                color: white !important;
+                letter-spacing: -0.025em !important;
+            }\n";
+            $css .= ".fi-simple-layout > .fi-simple-main-ctn {
+                width: 50% !important;
+                min-height: 100vh !important;
+                display: flex !important;
+                align-items: center !important;
+                justify-content: center !important;
+                padding: 2rem !important;
+                background: white !important;
             }\n";
             $css .= ".fi-simple-main {
-                width: 100%;
-                max-width: 400px;
+                width: 100% !important;
+                max-width: 400px !important;
             }\n";
             $css .= ".dark .fi-simple-layout { background: #0f172a !important; }\n";
+            $css .= ".dark .fi-simple-layout > .fi-simple-main-ctn { background: #0f172a !important; }\n";
+            $css .= ".dark .fi-simple-layout::before { color: rgba(255,255,255,0.9) !important; }\n";
             $css .= "@media (max-width: 1024px) { 
                 .fi-simple-layout::before { display: none !important; }
-                .fi-simple-layout { justify-content: center; }
+                .fi-simple-layout { justify-content: center !important; }
+                .fi-simple-layout > .fi-simple-main-ctn { width: 100% !important; }
             }\n";
         } elseif ($loginStyle === 'fullscreen') {
             // Subtle background tint with clean card
