@@ -96,6 +96,17 @@ class FontManager
         return [400, 500, 600, 700]; // Default weights
     }
 
+    public static function getWeightOptions(): array
+    {
+        return [
+            300 => 'Light (300)',
+            400 => 'Regular (400)',
+            500 => 'Medium (500)',
+            600 => 'Semi-Bold (600)',
+            700 => 'Bold (700)',
+        ];
+    }
+
     public static function generateGoogleFontsUrl(array $fonts): string
     {
         if (empty($fonts)) {

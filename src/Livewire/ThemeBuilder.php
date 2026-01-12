@@ -331,6 +331,11 @@ class ThemeBuilder extends Component
 
     public function render()
     {
-        return view('filament-theme-switcher::livewire.theme-builder');
+        return view('filament-theme-switcher::livewire.theme-builder', [
+            'availableFonts' => $this->getAvailableFonts(),
+            'monoFonts' => $this->getMonoFonts(),
+            'fontSizes' => $this->getFontSizes(),
+            'fontWeights' => FontManager::getWeightOptions(),
+        ]);
     }
 }
