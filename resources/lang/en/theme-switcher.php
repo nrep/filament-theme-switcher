@@ -51,4 +51,16 @@ return [
     'exported' => 'Theme exported successfully!',
     'imported' => 'Theme imported successfully!',
     'import_error' => 'Failed to import theme. Please check the file format.',
+    'duplicate' => 'Duplicate Theme',
+    'duplicated' => 'Theme duplicated successfully!',
+
+    // Scheduled Dark Mode
+    'scheduled_dark_mode' => 'Enable Scheduled Dark Mode',
+    'scheduled_dark_mode_description' => 'Automatically switch to dark mode during specified hours.',
+    'scheduled_start' => 'Start Time',
+    'scheduled_end' => 'End Time',
+
+    // CSS Snippets
+    'css_snippets' => 'Quick Snippets',
+    'css_snippets_placeholder' => 'Select a snippet to add...',
 ];

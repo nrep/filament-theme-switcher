@@ -8,6 +8,8 @@ use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\TimePicker;
 use Filament\Forms\Components\Toggle;
 use Filament\Forms\Components\ToggleButtons;
 use Filament\Forms\Concerns\InteractsWithForms;
@@ -16,6 +18,7 @@ use Filament\Forms\Form;
 use Filament\Notifications\Notification;
 use Filament\Pages\Page;
 use Isura\FilamentThemeSwitcher\FilamentThemeSwitcherPlugin;
+use Isura\FilamentThemeSwitcher\Support\CssSnippets;
 use Isura\FilamentThemeSwitcher\ThemeManager;
 
 class ThemeSettings extends Page implements HasForms
@@ -69,11 +72,16 @@ class ThemeSettings extends Page implements HasForms
     {
         $themeManager = app(ThemeManager::class);
 
+        $scheduledSettings = $themeManager->getScheduledDarkModeSettings();
+        
         $this->form->fill([
             'theme' => $themeManager->getCurrentTheme(),
             'colors' => $themeManager->getCurrentColors() ?? [],
             'dark_mode' => $themeManager->getDarkMode(),
             'custom_css' => $themeManager->getCustomCss() ?? '',
+            'scheduled_enabled' => $scheduledSettings['enabled'] ?? false,
+            'scheduled_start' => $scheduledSettings['start_time'] ?? '18:00',
+            'scheduled_end' => $scheduledSettings['end_time'] ?? '06:00',
         ]);
     }
 
@@ -145,6 +153,23 @@ class ThemeSettings extends Page implements HasForms
                             ])
                             ->inline()
                             ->default('system'),
+                        Toggle::make('scheduled_enabled')
+                            ->label(__('filament-theme-switcher::theme-switcher.scheduled_dark_mode'))
+                            ->helperText(__('filament-theme-switcher::theme-switcher.scheduled_dark_mode_description'))
+                            ->live()
+                            ->visible(fn () => $themeManager->isScheduledDarkModeEnabled()),
+                        Grid::make(2)
+                            ->schema([
+                                TextInput::make('scheduled_start')
+                                    ->label(__('filament-theme-switcher::theme-switcher.scheduled_start'))
+                                    ->type('time')
+                                    ->default('18:00'),
+                                TextInput::make('scheduled_end')
+                                    ->label(__('filament-theme-switcher::theme-switcher.scheduled_end'))
+                                    ->type('time')
+                                    ->default('06:00'),
+                            ])
+                            ->visible(fn ($get) => $get('scheduled_enabled') && $themeManager->isScheduledDarkModeEnabled()),
                     ])
                     ->visible(fn () => $themeManager->isDarkModeEnabled())
                     ->collapsible(),
@@ -152,10 +177,27 @@ class ThemeSettings extends Page implements HasForms
                 Section::make(__('filament-theme-switcher::theme-switcher.custom_css'))
                     ->description(__('filament-theme-switcher::theme-switcher.custom_css_description'))
                     ->schema([
+                        Select::make('css_snippet')
+                            ->label(__('filament-theme-switcher::theme-switcher.css_snippets'))
+                            ->options(collect(CssSnippets::flat())->mapWithKeys(fn ($s) => [$s['name'] => $s['name'] . ' - ' . $s['description']]))
+                            ->placeholder(__('filament-theme-switcher::theme-switcher.css_snippets_placeholder'))
+                            ->live()
+                            ->afterStateUpdated(function ($state, $set, $get) {
+                                if ($state) {
+                                    $snippets = CssSnippets::flat();
+                                    $snippet = collect($snippets)->firstWhere('name', $state);
+                                    if ($snippet) {
+                                        $currentCss = $get('custom_css') ?? '';
+                                        $newCss = $currentCss ? $currentCss . "\n\n" . $snippet['css'] : $snippet['css'];
+                                        $set('custom_css', $newCss);
+                                        $set('css_snippet', null);
+                                    }
+                                }
+                            }),
                         Textarea::make('custom_css')
                             ->label(__('filament-theme-switcher::theme-switcher.custom_css_label'))
                             ->placeholder('.fi-sidebar { background: #1a1a2e; }')
-                            ->rows(8)
+                            ->rows(10)
                             ->maxLength(config('filament-theme-switcher.custom_css.max_length', 10000)),
                     ])
                     ->visible(fn () => $themeManager->isCustomCssEnabled())
@@ -192,6 +234,16 @@ class ThemeSettings extends Page implements HasForms
             $data['dark_mode'] ?? 'system',
             $data['custom_css'] ?? null
         );
+
+        // Save scheduled dark mode settings
+        if ($themeManager->isScheduledDarkModeEnabled()) {
+            $themeManager->setScheduledDarkMode([
+                'enabled' => $data['scheduled_enabled'] ?? false,
+                'start_time' => $data['scheduled_start'] ?? '18:00',
+                'end_time' => $data['scheduled_end'] ?? '06:00',
+                'timezone' => config('app.timezone', 'UTC'),
+            ]);
+        }
 
         Notification::make()
             ->title(__('filament-theme-switcher::theme-switcher.saved'))
@@ -239,6 +291,12 @@ class ThemeSettings extends Page implements HasForms
         $themeManager = app(ThemeManager::class);
 
         return [
+            Action::make('duplicate')
+                ->label(__('filament-theme-switcher::theme-switcher.duplicate'))
+                ->icon('heroicon-o-document-duplicate')
+                ->color('gray')
+                ->action('duplicateTheme')
+                ->visible(fn () => $themeManager->isImportExportEnabled()),
             Action::make('export')
                 ->label(__('filament-theme-switcher::theme-switcher.export'))
                 ->icon('heroicon-o-arrow-down-tray')
@@ -246,5 +304,18 @@ class ThemeSettings extends Page implements HasForms
                 ->action('exportTheme')
                 ->visible(fn () => $themeManager->isImportExportEnabled()),
         ];
+    }
+
+    public function duplicateTheme(): void
+    {
+        $themeManager = app(ThemeManager::class);
+        $data = $themeManager->duplicateTheme('My Custom Theme');
+
+        $this->dispatch('download-theme', json: json_encode($data, JSON_PRETTY_PRINT));
+
+        Notification::make()
+            ->title(__('filament-theme-switcher::theme-switcher.duplicated'))
+            ->success()
+            ->send();
     }
 }
