@@ -3,6 +3,7 @@
 namespace Isura\FilamentThemeSwitcher\Livewire;
 
 use Filament\Facades\Filament;
+use Isura\FilamentThemeSwitcher\Support\BrandManager;
 use Isura\FilamentThemeSwitcher\Support\ColorPaletteGenerator;
 use Isura\FilamentThemeSwitcher\Support\FontManager;
 use Isura\FilamentThemeSwitcher\ThemeManager;
@@ -59,6 +60,15 @@ class ThemeBuilder extends Component
         'heading' => ['family' => 'Inter', 'weight' => 600, 'size' => 'default'],
         'body' => ['family' => 'Inter', 'weight' => 400, 'size' => 'default'],
         'mono' => ['family' => 'JetBrains Mono', 'weight' => 400, 'size' => 'default'],
+    ];
+
+    public array $brand = [
+        'logo' => null,
+        'logo_dark' => null,
+        'favicon' => null,
+        'login_style' => 'centered',
+        'login_background' => null,
+        'show_app_name' => true,
     ];
 
     public function mount(): void
@@ -123,6 +133,18 @@ class ThemeBuilder extends Component
     public function getFontSizes(): array
     {
         return FontManager::getFontSizes();
+    }
+
+    public function applyBrandPreset(string $presetName): void
+    {
+        $preset = BrandManager::getPreset($presetName);
+        
+        if ($preset) {
+            $this->brand['login_style'] = $preset['login_style'] ?? 'centered';
+            $this->brand['show_app_name'] = $preset['show_app_name'] ?? true;
+            $this->saveToHistory();
+            $this->dispatch('brand-preset-applied', preset: $presetName);
+        }
     }
 
     public function setPreviewMode(string $mode): void

@@ -114,11 +114,11 @@ Transform the basic theme switcher into a premium Filament plugin with advanced 
 ### Milestone: Brand Kits
 > Priority: High | Effort: Medium
 
-- [ ] **BK-001**: Add logo upload per theme
-- [ ] **BK-002**: Add favicon customization
-- [ ] **BK-003**: Implement login page theming
-- [ ] **BK-004**: Add email template theming support
-- [ ] **BK-005**: Create brand kit presets
+- [x] **BK-001**: Add logo upload per theme
+- [x] **BK-002**: Add favicon customization
+- [x] **BK-003**: Implement login page theming
+- [x] **BK-004**: Add email template theming support
+- [x] **BK-005**: Create brand kit presets
 
 ### Milestone: Multi-Panel Support
 > Priority: Medium | Effort: Low

@@ -105,4 +105,20 @@ return [
     'font_weight' => 'Weight',
     'font_size' => 'Size',
     'font_preview_text' => 'The quick brown fox jumps over the lazy dog.',
+
+    // Brand Kits
+    'branding' => 'Branding',
+    'logo' => 'Logo',
+    'logo_dark' => 'Logo (Dark Mode)',
+    'favicon' => 'Favicon',
+    'login_style' => 'Login Page Style',
+    'login_background' => 'Login Background',
+    'show_app_name' => 'Show App Name',
+    'brand_presets' => 'Brand Presets',
+    'upload_logo' => 'Upload Logo',
+    'upload_favicon' => 'Upload Favicon',
+    'login_centered' => 'Centered',
+    'login_split' => 'Split Screen',
+    'login_fullscreen' => 'Fullscreen Background',
+    'login_gradient' => 'Gradient Background',
 ];

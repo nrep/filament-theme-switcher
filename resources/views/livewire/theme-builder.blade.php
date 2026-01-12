@@ -157,6 +157,64 @@
                 </div>
             </div>
 
+            {{-- Branding Section --}}
+            <div class="bg-white dark:bg-gray-900 rounded-xl p-4 shadow-sm border border-gray-200 dark:border-gray-700">
+                <h3 class="text-lg font-semibold mb-4 text-gray-900 dark:text-white">
+                    {{ __('filament-theme-switcher::theme-switcher.branding') }}
+                </h3>
+
+                <div class="space-y-4">
+                    {{-- Login Style --}}
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                            {{ __('filament-theme-switcher::theme-switcher.login_style') }}
+                        </label>
+                        <div class="grid grid-cols-2 gap-2">
+                            @foreach(['centered', 'split', 'fullscreen', 'gradient'] as $style)
+                                <button
+                                    wire:click="$set('brand.login_style', '{{ $style }}')"
+                                    class="p-3 rounded-lg border text-sm text-left transition {{ $brand['login_style'] === $style ? 'border-primary-500 bg-primary-50 dark:bg-primary-900/20' : 'border-gray-200 dark:border-gray-700 hover:border-gray-300' }}"
+                                >
+                                    {{ __('filament-theme-switcher::theme-switcher.login_' . $style) }}
+                                </button>
+                            @endforeach
+                        </div>
+                    </div>
+
+                    {{-- Show App Name Toggle --}}
+                    <div class="flex items-center justify-between">
+                        <label class="text-sm font-medium text-gray-700 dark:text-gray-300">
+                            {{ __('filament-theme-switcher::theme-switcher.show_app_name') }}
+                        </label>
+                        <button
+                            wire:click="$toggle('brand.show_app_name')"
+                            class="relative inline-flex h-6 w-11 items-center rounded-full transition {{ $brand['show_app_name'] ? 'bg-primary-600' : 'bg-gray-200 dark:bg-gray-700' }}"
+                        >
+                            <span class="inline-block h-4 w-4 transform rounded-full bg-white transition {{ $brand['show_app_name'] ? 'translate-x-6' : 'translate-x-1' }}"></span>
+                        </button>
+                    </div>
+
+                    {{-- Brand Presets --}}
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                            {{ __('filament-theme-switcher::theme-switcher.brand_presets') }}
+                        </label>
+                        <div class="grid grid-cols-2 gap-2">
+                            @php $presets = \Isura\FilamentThemeSwitcher\Support\BrandManager::getPresets(); @endphp
+                            @foreach($presets as $key => $preset)
+                                <button
+                                    wire:click="applyBrandPreset('{{ $key }}')"
+                                    class="p-2 rounded-lg border border-gray-200 dark:border-gray-700 hover:border-primary-500 text-left transition"
+                                >
+                                    <span class="text-sm font-medium">{{ $preset['name'] }}</span>
+                                    <p class="text-xs text-gray-500">{{ $preset['description'] }}</p>
+                                </button>
+                            @endforeach
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             {{-- Typography Section --}}
             <div class="bg-white dark:bg-gray-900 rounded-xl p-4 shadow-sm border border-gray-200 dark:border-gray-700">
                 <h3 class="text-lg font-semibold mb-4 text-gray-900 dark:text-white">
