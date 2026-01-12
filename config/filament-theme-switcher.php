@@ -98,4 +98,33 @@ return [
     'theme_builder' => [
         'enabled' => true,
     ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Multi-Tenant Configuration
+    |--------------------------------------------------------------------------
+    |
+    | Configure tenant-aware theming for multi-tenant applications.
+    |
+    */
+    'tenant' => [
+        'enabled' => false,
+        'base_domain' => env('FILAMENT_THEME_BASE_DOMAIN', null),
+        'subdomain_detection' => false,
+        'cache_ttl' => 3600, // seconds
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | White Label Configuration
+    |--------------------------------------------------------------------------
+    |
+    | Remove plugin branding for white-label deployments.
+    |
+    */
+    'white_label' => [
+        'enabled' => false,
+        'hide_powered_by' => false,
+        'custom_footer' => null,
+    ],
 ];

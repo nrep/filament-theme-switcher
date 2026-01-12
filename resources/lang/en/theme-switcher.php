@@ -128,4 +128,16 @@ return [
     'inherit_from_parent' => 'Inherit from Parent Panel',
     'panel_colors' => 'Panel Colors',
     'no_panel_override' => 'Using default theme',
+
+    // Multi-Tenant Theming
+    'tenant_theming' => 'Tenant Theming',
+    'current_tenant' => 'Current Tenant',
+    'tenant_theme' => 'Tenant Theme',
+    'tenant_branding' => 'Tenant Branding',
+    'subdomain_detection' => 'Subdomain Detection',
+    'white_label' => 'White Label',
+    'hide_powered_by' => 'Hide Powered By',
+    'tenant_app_name' => 'Tenant App Name',
+    'tenant_logo' => 'Tenant Logo',
+    'no_tenant_detected' => 'No tenant detected',
 ];

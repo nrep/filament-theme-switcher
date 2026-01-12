@@ -19,8 +19,8 @@ Transform the basic theme switcher into a premium Filament plugin with advanced 
 |---------|----------|-------------|--------|
 | v1.x | Foundation | Jan 2026 | ✅ Released |
 | v2.0 | Dark Matter | Jan 2026 | ✅ Released |
-| v3.0 | Architect | Jan 2026 | 🚧 In Progress |
-| v4.0 | Marketplace | Jun 2026 | 📋 Planned |
+| v3.0 | Architect | Jan 2026 | ✅ Released |
+| v4.0 | Marketplace | Jan 2026 | 🚧 In Progress |
 
 ---
 
@@ -141,11 +141,11 @@ Transform the basic theme switcher into a premium Filament plugin with advanced 
 ### Milestone: Multi-Tenant Theming
 > Priority: High | Effort: High
 
-- [ ] **MT-001**: Add tenant-aware theme resolution
-- [ ] **MT-002**: Implement tenant-specific branding
-- [ ] **MT-003**: Create white-label support (remove plugin branding)
-- [ ] **MT-004**: Add subdomain-based theme detection
-- [ ] **MT-005**: Create tenant theme management API
+- [x] **MT-001**: Add tenant-aware theme resolution
+- [x] **MT-002**: Implement tenant-specific branding
+- [x] **MT-003**: Create white-label support (remove plugin branding)
+- [x] **MT-004**: Add subdomain-based theme detection
+- [x] **MT-005**: Create tenant theme management API
 
 ### Milestone: Theme Marketplace
 > Priority: Medium | Effort: High
