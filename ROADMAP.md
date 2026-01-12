@@ -1,7 +1,7 @@
 # Filament Theme Switcher - Premium Roadmap
 
 > **Project:** nrep/filament-theme-switcher  
-> **Current Version:** v4.0.6  
+> **Current Version:** v4.0.7  
 > **Target:** Premium Filament Plugin  
 > **Last Updated:** 2026-01-12
 

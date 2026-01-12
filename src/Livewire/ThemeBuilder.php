@@ -366,52 +366,65 @@ class ThemeBuilder extends Component
         $primaryColor = $this->colors['primary'] ?? '#3b82f6';
         
         if ($loginStyle === 'gradient') {
+            // Rich gradient background with glassmorphism card
             $css .= ".fi-simple-layout { 
-                background: linear-gradient(135deg, {$primaryColor} 0%, color-mix(in srgb, {$primaryColor} 60%, #1e1b4b) 50%, color-mix(in srgb, {$primaryColor} 40%, #0f172a) 100%);
+                background: linear-gradient(135deg, {$primaryColor} 0%, color-mix(in srgb, {$primaryColor} 50%, #312e81) 50%, #1e1b4b 100%) !important;
                 min-height: 100vh;
             }\n";
             $css .= ".fi-simple-main { 
-                backdrop-filter: blur(20px);
-                background: rgba(255, 255, 255, 0.95);
-                border-radius: 24px;
-                box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(255, 255, 255, 0.1);
+                backdrop-filter: blur(16px) !important;
+                background: rgba(255, 255, 255, 0.95) !important;
+                border-radius: 16px !important;
+                box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4) !important;
             }\n";
             $css .= ".dark .fi-simple-main {
-                background: rgba(30, 30, 40, 0.9);
-                border: 1px solid rgba(255, 255, 255, 0.1);
+                background: rgba(15, 23, 42, 0.9) !important;
+                border: 1px solid rgba(255, 255, 255, 0.1) !important;
             }\n";
         } elseif ($loginStyle === 'split') {
+            // TALL-stack style split layout - gradient left, form right
             $css .= ".fi-simple-layout { 
-                display: grid; 
-                grid-template-columns: 1fr 1fr; 
-                min-height: 100vh;
+                display: flex !important;
+                min-height: 100vh !important;
+                background: #f8fafc !important;
             }\n";
-            $css .= ".fi-simple-layout::before { 
-                content: ''; 
-                background: linear-gradient(135deg, {$primaryColor} 0%, color-mix(in srgb, {$primaryColor} 50%, #1e1b4b) 100%);
-            }\n";
-            $css .= ".fi-simple-main {
+            $css .= ".fi-simple-layout > .fi-simple-main-ctn {
+                flex: 1;
                 display: flex;
                 align-items: center;
                 justify-content: center;
                 padding: 2rem;
+                order: 2;
             }\n";
-            $css .= "@media (max-width: 768px) { .fi-simple-layout { grid-template-columns: 1fr; } .fi-simple-layout::before { display: none; } }\n";
+            $css .= ".fi-simple-layout::before { 
+                content: '';
+                flex: 1;
+                order: 1;
+                background: linear-gradient(135deg, {$primaryColor} 0%, color-mix(in srgb, {$primaryColor} 40%, #1e1b4b) 100%);
+                display: block !important;
+            }\n";
+            $css .= ".fi-simple-main {
+                width: 100%;
+                max-width: 400px;
+            }\n";
+            $css .= ".dark .fi-simple-layout { background: #0f172a !important; }\n";
+            $css .= "@media (max-width: 1024px) { 
+                .fi-simple-layout::before { display: none !important; }
+                .fi-simple-layout { justify-content: center; }
+            }\n";
         } elseif ($loginStyle === 'fullscreen') {
+            // Subtle background tint with clean card
             $css .= ".fi-simple-layout { 
-                background: linear-gradient(180deg, color-mix(in srgb, {$primaryColor} 20%, transparent) 0%, transparent 50%),
-                            radial-gradient(ellipse at top right, color-mix(in srgb, {$primaryColor} 30%, transparent), transparent 50%);
-                background-color: #f8fafc;
+                background: linear-gradient(to bottom right, color-mix(in srgb, {$primaryColor} 8%, #f8fafc), #f8fafc) !important;
                 min-height: 100vh;
             }\n";
             $css .= ".fi-simple-main { 
-                backdrop-filter: blur(10px);
-                background: rgba(255, 255, 255, 0.8);
-                border-radius: 16px;
-                box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.1);
+                background: white !important;
+                border-radius: 12px !important;
+                box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(0, 0, 0, 0.05) !important;
             }\n";
-            $css .= ".dark .fi-simple-layout { background-color: #0f172a; }\n";
-            $css .= ".dark .fi-simple-main { background: rgba(30, 41, 59, 0.8); }\n";
+            $css .= ".dark .fi-simple-layout { background: linear-gradient(to bottom right, color-mix(in srgb, {$primaryColor} 15%, #0f172a), #0f172a) !important; }\n";
+            $css .= ".dark .fi-simple-main { background: #1e293b !important; border: 1px solid rgba(255,255,255,0.1) !important; }\n";
         }
         
         // Show/hide app name in sidebar
