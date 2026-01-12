@@ -9,6 +9,38 @@
             </button>
         </x-slot>
 
+        @if($darkModeEnabled)
+            <x-filament::dropdown.header>
+                {{ __('filament-theme-switcher::theme-switcher.dark_mode') }}
+            </x-filament::dropdown.header>
+            <x-filament::dropdown.list>
+                <x-filament::dropdown.list.item
+                    wire:click="switchDarkMode('light')"
+                    :icon="$darkMode === 'light' ? 'heroicon-s-check-circle' : 'heroicon-o-sun'"
+                    :color="$darkMode === 'light' ? 'primary' : 'gray'"
+                >
+                    {{ __('filament-theme-switcher::theme-switcher.dark_mode_light') }}
+                </x-filament::dropdown.list.item>
+                <x-filament::dropdown.list.item
+                    wire:click="switchDarkMode('dark')"
+                    :icon="$darkMode === 'dark' ? 'heroicon-s-check-circle' : 'heroicon-o-moon'"
+                    :color="$darkMode === 'dark' ? 'primary' : 'gray'"
+                >
+                    {{ __('filament-theme-switcher::theme-switcher.dark_mode_dark') }}
+                </x-filament::dropdown.list.item>
+                <x-filament::dropdown.list.item
+                    wire:click="switchDarkMode('system')"
+                    :icon="$darkMode === 'system' ? 'heroicon-s-check-circle' : 'heroicon-o-computer-desktop'"
+                    :color="$darkMode === 'system' ? 'primary' : 'gray'"
+                >
+                    {{ __('filament-theme-switcher::theme-switcher.dark_mode_system') }}
+                </x-filament::dropdown.list.item>
+            </x-filament::dropdown.list>
+        @endif
+
+        <x-filament::dropdown.header>
+            {{ __('filament-theme-switcher::theme-switcher.theme') }}
+        </x-filament::dropdown.header>
         <x-filament::dropdown.list>
             @foreach($themes as $key => $theme)
                 <x-filament::dropdown.list.item

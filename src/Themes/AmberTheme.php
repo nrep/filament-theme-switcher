@@ -27,4 +27,16 @@ class AmberTheme extends AbstractTheme
             'warning' => Color::Orange,
         ];
     }
+
+    public function getDarkColors(): array
+    {
+        return [
+            'primary' => Color::Yellow,
+            'danger' => Color::Rose,
+            'gray' => Color::Neutral,
+            'info' => Color::Amber,
+            'success' => Color::Emerald,
+            'warning' => Color::Orange,
+        ];
+    }
 }

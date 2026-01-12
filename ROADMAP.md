@@ -50,11 +50,11 @@ Transform the basic theme switcher into a premium Filament plugin with advanced 
 > Priority: High | Effort: Medium
 
 - [x] **DM-001**: Add dark mode toggle to theme settings
-- [ ] **DM-002**: Create dark mode variants for all built-in themes
+- [x] **DM-002**: Create dark mode variants for all built-in themes
 - [x] **DM-003**: Implement system preference detection (prefers-color-scheme)
 - [ ] **DM-004**: Add scheduled dark mode (sunset/sunrise based on timezone)
 - [x] **DM-005**: Per-user dark mode preference storage
-- [ ] **DM-006**: Add dark mode toggle to Livewire switcher component
+- [x] **DM-006**: Add dark mode toggle to Livewire switcher component
 
 ### Milestone: Custom CSS Injection
 > Priority: High | Effort: Medium
@@ -256,6 +256,8 @@ Transform the basic theme switcher into a premium Filament plugin with advanced 
   - Updated config with dark_mode, custom_css, import_export options
   - Updated migrations for dark_mode and custom_css columns
   - Updated translations for new features
+  - Added dark mode color variants for all 7 themes
+  - Added dark mode toggle to Livewire switcher dropdown
 
 ### 2026-01-11
 - Released v1.0.0 (initial release)

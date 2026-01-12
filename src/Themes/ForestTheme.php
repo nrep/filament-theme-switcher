@@ -27,4 +27,16 @@ class ForestTheme extends AbstractTheme
             'warning' => Color::Yellow,
         ];
     }
+
+    public function getDarkColors(): array
+    {
+        return [
+            'primary' => Color::Green,
+            'danger' => Color::Rose,
+            'gray' => Color::Stone,
+            'info' => Color::Emerald,
+            'success' => Color::Lime,
+            'warning' => Color::Amber,
+        ];
+    }
 }

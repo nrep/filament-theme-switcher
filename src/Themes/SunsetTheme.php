@@ -27,4 +27,16 @@ class SunsetTheme extends AbstractTheme
             'warning' => Color::Yellow,
         ];
     }
+
+    public function getDarkColors(): array
+    {
+        return [
+            'primary' => Color::Amber,
+            'danger' => Color::Rose,
+            'gray' => Color::Neutral,
+            'info' => Color::Orange,
+            'success' => Color::Emerald,
+            'warning' => Color::Yellow,
+        ];
+    }
 }

@@ -27,4 +27,16 @@ class RoseTheme extends AbstractTheme
             'warning' => Color::Orange,
         ];
     }
+
+    public function getDarkColors(): array
+    {
+        return [
+            'primary' => Color::Pink,
+            'danger' => Color::Rose,
+            'gray' => Color::Slate,
+            'info' => Color::Fuchsia,
+            'success' => Color::Teal,
+            'warning' => Color::Amber,
+        ];
+    }
 }

@@ -27,4 +27,16 @@ class MidnightTheme extends AbstractTheme
             'warning' => Color::Amber,
         ];
     }
+
+    public function getDarkColors(): array
+    {
+        return [
+            'primary' => Color::Violet,
+            'danger' => Color::Pink,
+            'gray' => Color::Zinc,
+            'info' => Color::Purple,
+            'success' => Color::Teal,
+            'warning' => Color::Yellow,
+        ];
+    }
 }

@@ -27,4 +27,16 @@ class OceanTheme extends AbstractTheme
             'warning' => Color::Amber,
         ];
     }
+
+    public function getDarkColors(): array
+    {
+        return [
+            'primary' => Color::Sky,
+            'danger' => Color::Pink,
+            'gray' => Color::Zinc,
+            'info' => Color::Cyan,
+            'success' => Color::Emerald,
+            'warning' => Color::Amber,
+        ];
+    }
 }
