@@ -73,17 +73,22 @@ class ThemeBuilder extends Component
 
     public function mount(): void
     {
-        $themeManager = app(ThemeManager::class);
+        // Load colors from session first (most reliable)
+        $sessionColors = session()->get('filament_theme_colors');
         
-        // Load current theme settings from session directly for reliability
-        $sessionColors = session('filament_theme_colors');
-        $currentColors = $sessionColors ?? $themeManager->getCurrentColors();
-        
-        if ($currentColors && is_array($currentColors)) {
-            $this->colors = array_merge($this->colors, $currentColors);
+        if ($sessionColors && is_array($sessionColors)) {
+            $this->colors = array_merge($this->colors, $sessionColors);
+        } else {
+            // Fallback to ThemeManager if no session data
+            $themeManager = app(ThemeManager::class);
+            $currentColors = $themeManager->getCurrentColors();
+            if ($currentColors && is_array($currentColors)) {
+                $this->colors = array_merge($this->colors, $currentColors);
+            }
         }
         
-        $this->customCss = session('filament_custom_css') ?? $themeManager->getCustomCss() ?? '';
+        // Load custom CSS
+        $this->customCss = session()->get('filament_custom_css', '');
         
         // Save initial state to history
         $this->saveToHistory();
@@ -246,18 +251,22 @@ class ThemeBuilder extends Component
     public function applyTheme(): void
     {
         $themeManager = app(ThemeManager::class);
+        $generatedCss = $this->generateComponentCss();
         
-        // Save colors directly to session for reliability
-        session(['filament_theme_colors' => $this->colors]);
-        session(['filament_custom_css' => $this->generateComponentCss()]);
-        
-        // Also save through ThemeManager for consistency
+        // Save through ThemeManager
         $themeManager->setTheme(
             $themeManager->getCurrentTheme() ?? 'default',
             $this->colors,
             $themeManager->getDarkMode(),
-            $this->generateComponentCss()
+            $generatedCss
         );
+        
+        // Also save directly to session for reliability
+        session()->put('filament_theme_colors', $this->colors);
+        session()->put('filament_custom_css', $generatedCss);
+        
+        // Force session save before reload
+        session()->save();
         
         // Dispatch browser event to trigger page reload
         $this->dispatch('theme-applied-reload');
