@@ -1,7 +1,7 @@
 # Filament Theme Switcher - Premium Roadmap
 
 > **Project:** nrep/filament-theme-switcher  
-> **Current Version:** v2.1.0  
+> **Current Version:** v3.0.0-beta  
 > **Target:** Premium Filament Plugin  
 > **Last Updated:** 2026-01-12
 
@@ -19,7 +19,7 @@ Transform the basic theme switcher into a premium Filament plugin with advanced 
 |---------|----------|-------------|--------|
 | v1.x | Foundation | Jan 2026 | ✅ Released |
 | v2.0 | Dark Matter | Jan 2026 | ✅ Released |
-| v3.0 | Architect | Apr 2026 | 📋 Planned |
+| v3.0 | Architect | Jan 2026 | 🚧 In Progress |
 | v4.0 | Marketplace | Jun 2026 | 📋 Planned |
 
 ---
@@ -95,21 +95,21 @@ Transform the basic theme switcher into a premium Filament plugin with advanced 
 ### Milestone: Visual Theme Builder
 > Priority: High | Effort: High
 
-- [ ] **VB-001**: Design theme builder UI mockups
-- [ ] **VB-002**: Create live preview panel component
-- [ ] **VB-003**: Implement drag-and-drop color picker
-- [ ] **VB-004**: Add component-level styling (sidebar, header, cards, buttons)
-- [ ] **VB-005**: Create undo/redo functionality
-- [ ] **VB-006**: Add responsive preview (desktop/tablet/mobile)
+- [x] **VB-001**: Design theme builder UI mockups
+- [x] **VB-002**: Create live preview panel component
+- [x] **VB-003**: Implement drag-and-drop color picker
+- [x] **VB-004**: Add component-level styling (sidebar, header, cards, buttons)
+- [x] **VB-005**: Create undo/redo functionality
+- [x] **VB-006**: Add responsive preview (desktop/tablet/mobile)
 
 ### Milestone: Font Customization
 > Priority: Medium | Effort: Medium
 
-- [ ] **FC-001**: Integrate Google Fonts API
-- [ ] **FC-002**: Add font family selector (heading, body, mono)
-- [ ] **FC-003**: Implement font size customization
-- [ ] **FC-004**: Add font weight options
-- [ ] **FC-005**: Create font preview in settings
+- [x] **FC-001**: Integrate Google Fonts API
+- [x] **FC-002**: Add font family selector (heading, body, mono)
+- [x] **FC-003**: Implement font size customization
+- [x] **FC-004**: Add font weight options
+- [x] **FC-005**: Create font preview in settings
 
 ### Milestone: Brand Kits
 > Priority: High | Effort: Medium
