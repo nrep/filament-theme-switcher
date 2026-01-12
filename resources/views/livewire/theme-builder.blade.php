@@ -1,4 +1,4 @@
-<div class="theme-builder">
+<div class="theme-builder" x-data x-on:theme-applied-reload.window="window.location.reload()">
     <div class="flex flex-col lg:flex-row gap-6">
         {{-- Controls Panel --}}
         <div class="w-full lg:w-1/3 space-y-6">

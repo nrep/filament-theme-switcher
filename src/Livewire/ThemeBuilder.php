@@ -245,6 +245,7 @@ class ThemeBuilder extends Component
     {
         $themeManager = app(ThemeManager::class);
         
+        // Save the theme with colors and custom CSS
         $themeManager->setTheme(
             $themeManager->getCurrentTheme() ?? 'default',
             $this->colors,
@@ -252,8 +253,8 @@ class ThemeBuilder extends Component
             $this->generateComponentCss()
         );
         
-        $this->dispatch('theme-applied');
-        $this->redirect(request()->header('Referer') ?? Filament::getUrl());
+        // Dispatch browser event to trigger page reload
+        $this->dispatch('theme-applied-reload');
     }
 
     public function generateComponentCss(): string
