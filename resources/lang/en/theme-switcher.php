@@ -77,4 +77,23 @@ return [
 
     // Import
     'import_file' => 'Theme File (JSON)',
+
+    // Theme Builder (v3.0)
+    'theme_builder' => 'Theme Builder',
+    'colors' => 'Colors',
+    'undo' => 'Undo',
+    'redo' => 'Redo',
+    'component_styles' => 'Component Styles',
+    'sidebar' => 'Sidebar',
+    'header' => 'Header',
+    'cards' => 'Cards',
+    'buttons' => 'Buttons',
+    'background' => 'Background',
+    'border_radius' => 'Border Radius',
+    'shadow' => 'Shadow',
+    'spacing' => 'Spacing',
+    'sidebar_width' => 'Sidebar Width',
+    'content_padding' => 'Content Padding',
+    'apply_theme' => 'Apply Theme',
+    'live_preview' => 'Live Preview',
 ];

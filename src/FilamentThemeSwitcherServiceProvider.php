@@ -43,9 +43,10 @@ class FilamentThemeSwitcherServiceProvider extends PackageServiceProvider
     {
         parent::packageBooted();
 
-        // Register Livewire component
+        // Register Livewire components
         if (class_exists(Livewire::class)) {
             Livewire::component('theme-switcher', ThemeSwitcher::class);
+            Livewire::component('theme-builder', \Isura\FilamentThemeSwitcher\Livewire\ThemeBuilder::class);
         }
 
         // Publish assets

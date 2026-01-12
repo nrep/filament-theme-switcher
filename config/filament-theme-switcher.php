@@ -94,4 +94,8 @@ return [
     'import_export' => [
         'enabled' => true,
     ],
+
+    'theme_builder' => [
+        'enabled' => true,
+    ],
 ];
