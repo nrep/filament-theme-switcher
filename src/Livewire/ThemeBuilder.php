@@ -73,35 +73,28 @@ class ThemeBuilder extends Component
 
     public function mount(): void
     {
-        // Load all theme builder state from session
-        $savedState = session()->get('filament_theme_builder_state');
+        $themeManager = app(ThemeManager::class);
         
-        if ($savedState && is_array($savedState)) {
-            if (isset($savedState['colors']) && is_array($savedState['colors'])) {
-                $this->colors = array_merge($this->colors, $savedState['colors']);
-            }
-            if (isset($savedState['fonts']) && is_array($savedState['fonts'])) {
-                $this->fonts = array_merge($this->fonts, $savedState['fonts']);
-            }
-            if (isset($savedState['components']) && is_array($savedState['components'])) {
-                $this->components = array_merge($this->components, $savedState['components']);
-            }
-            if (isset($savedState['spacing']) && is_array($savedState['spacing'])) {
-                $this->spacing = array_merge($this->spacing, $savedState['spacing']);
-            }
-            if (isset($savedState['brand']) && is_array($savedState['brand'])) {
-                $this->brand = array_merge($this->brand, $savedState['brand']);
-            }
-            if (isset($savedState['customCss'])) {
-                $this->customCss = $savedState['customCss'];
-            }
-        } else {
-            // Fallback to ThemeManager for colors only
-            $themeManager = app(ThemeManager::class);
-            $currentColors = $themeManager->getCurrentColors();
-            if ($currentColors && is_array($currentColors)) {
-                $this->colors = array_merge($this->colors, $currentColors);
-            }
+        // Load all theme builder state from ThemeManager (handles both user mode and session)
+        $savedState = $themeManager->getThemeBuilderState();
+        
+        if (isset($savedState['colors']) && is_array($savedState['colors'])) {
+            $this->colors = array_merge($this->colors, $savedState['colors']);
+        }
+        if (isset($savedState['fonts']) && is_array($savedState['fonts'])) {
+            $this->fonts = array_merge($this->fonts, $savedState['fonts']);
+        }
+        if (isset($savedState['components']) && is_array($savedState['components'])) {
+            $this->components = array_merge($this->components, $savedState['components']);
+        }
+        if (isset($savedState['spacing']) && is_array($savedState['spacing'])) {
+            $this->spacing = array_merge($this->spacing, $savedState['spacing']);
+        }
+        if (isset($savedState['brand']) && is_array($savedState['brand'])) {
+            $this->brand = array_merge($this->brand, $savedState['brand']);
+        }
+        if (isset($savedState['custom_css'])) {
+            $this->customCss = $savedState['custom_css'];
         }
         
         // Save initial state to history
@@ -280,36 +273,27 @@ class ThemeBuilder extends Component
         $themeManager = app(ThemeManager::class);
         $generatedCss = $this->generateComponentCss();
         
-        // Save all theme builder state to session
+        // Save all theme builder state through ThemeManager (handles both user mode and session)
         $state = [
+            'theme' => $themeManager->getCurrentTheme() ?? 'default',
             'colors' => $this->colors,
             'fonts' => $this->fonts,
             'components' => $this->components,
             'spacing' => $this->spacing,
             'brand' => $this->brand,
-            'customCss' => $generatedCss,
+            'custom_css' => $generatedCss,
+            'dark_mode' => $themeManager->getDarkMode(),
         ];
-        session()->put('filament_theme_builder_state', $state);
-        
-        // Also save through ThemeManager for color application
-        $themeManager->setTheme(
-            $themeManager->getCurrentTheme() ?? 'default',
-            $this->colors,
-            $themeManager->getDarkMode(),
-            $generatedCss
-        );
+        $themeManager->setThemeBuilderState($state);
         
         // Store branding CSS in a file (persists after logout for login page styles)
         $brandingCssPath = storage_path('app/filament-theme-branding.css');
         file_put_contents($brandingCssPath, $generatedCss);
         
-        // Force session save before reload
-        session()->save();
-        
         // Show success notification
         \Filament\Notifications\Notification::make()
-            ->title('Theme Applied')
-            ->body('Your theme settings have been saved successfully.')
+            ->title(__('filament-theme-switcher::theme-switcher.theme_applied'))
+            ->body(__('filament-theme-switcher::theme-switcher.theme_applied_body'))
             ->success()
             ->send();
         
