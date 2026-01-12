@@ -49,17 +49,17 @@ Transform the basic theme switcher into a premium Filament plugin with advanced 
 ### Milestone: Dark Mode System
 > Priority: High | Effort: Medium
 
-- [ ] **DM-001**: Add dark mode toggle to theme settings
+- [x] **DM-001**: Add dark mode toggle to theme settings
 - [ ] **DM-002**: Create dark mode variants for all built-in themes
-- [ ] **DM-003**: Implement system preference detection (prefers-color-scheme)
+- [x] **DM-003**: Implement system preference detection (prefers-color-scheme)
 - [ ] **DM-004**: Add scheduled dark mode (sunset/sunrise based on timezone)
-- [ ] **DM-005**: Per-user dark mode preference storage
+- [x] **DM-005**: Per-user dark mode preference storage
 - [ ] **DM-006**: Add dark mode toggle to Livewire switcher component
 
 ### Milestone: Custom CSS Injection
 > Priority: High | Effort: Medium
 
-- [ ] **CSS-001**: Add custom CSS field to theme settings
+- [x] **CSS-001**: Add custom CSS field to theme settings
 - [ ] **CSS-002**: Create CSS editor with syntax highlighting (CodeMirror/Monaco)
 - [ ] **CSS-003**: Implement CSS scoping to prevent conflicts
 - [ ] **CSS-004**: Add CSS validation before saving
@@ -68,10 +68,10 @@ Transform the basic theme switcher into a premium Filament plugin with advanced 
 ### Milestone: Theme Import/Export
 > Priority: Medium | Effort: Low
 
-- [ ] **IE-001**: Create theme export to JSON functionality
-- [ ] **IE-002**: Create theme import from JSON functionality
+- [x] **IE-001**: Create theme export to JSON functionality
+- [x] **IE-002**: Create theme import from JSON functionality
 - [ ] **IE-003**: Add theme duplication feature
-- [ ] **IE-004**: Validate imported theme structure
+- [x] **IE-004**: Validate imported theme structure
 
 ### Milestone: Enhanced Color System
 > Priority: Medium | Effort: Medium
@@ -248,6 +248,14 @@ Transform the basic theme switcher into a premium Filament plugin with advanced 
 ### 2026-01-12
 - Created initial roadmap
 - Released v1.1.0 with bug fixes
+- **v2.0 Development Started:**
+  - Added dark mode toggle (light/dark/system)
+  - Added custom CSS injection feature
+  - Added theme export functionality
+  - Added SupportsDarkMode contract
+  - Updated config with dark_mode, custom_css, import_export options
+  - Updated migrations for dark_mode and custom_css columns
+  - Updated translations for new features
 
 ### 2026-01-11
 - Released v1.0.0 (initial release)

@@ -14,10 +14,16 @@ class UserTheme extends Model
         'panel_id',
         'theme',
         'colors',
+        'dark_mode',
+        'custom_css',
     ];
 
     protected $casts = [
         'colors' => 'array',
+    ];
+
+    protected $attributes = [
+        'dark_mode' => 'system',
     ];
 
     public function user(): BelongsTo

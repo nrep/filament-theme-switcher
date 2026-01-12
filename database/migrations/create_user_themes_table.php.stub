@@ -14,6 +14,8 @@ return new class extends Migration
             $table->string('panel_id')->nullable();
             $table->string('theme')->default('default');
             $table->json('colors')->nullable();
+            $table->string('dark_mode')->default('system');
+            $table->text('custom_css')->nullable();
             $table->timestamps();
 
             $table->unique(['user_id', 'panel_id']);

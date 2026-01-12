@@ -15,6 +15,10 @@ class ThemeManager
 
     protected ?array $currentColors = null;
 
+    protected ?string $darkMode = null;
+
+    protected ?string $customCss = null;
+
     public function getCurrentTheme(): ?string
     {
         if ($this->currentTheme !== null) {
@@ -72,7 +76,7 @@ class ThemeManager
         return null;
     }
 
-    public function setTheme(string $theme, ?array $colors = null): void
+    public function setTheme(string $theme, ?array $colors = null, ?string $darkMode = null, ?string $customCss = null): void
     {
         $plugin = $this->getPlugin();
 
@@ -85,6 +89,8 @@ class ThemeManager
                 [
                     'theme' => $theme,
                     'colors' => $colors,
+                    'dark_mode' => $darkMode,
+                    'custom_css' => $customCss,
                 ]
             );
         } else {
@@ -95,10 +101,22 @@ class ThemeManager
             } else {
                 Session::forget('filament_theme_colors');
             }
+
+            if ($darkMode) {
+                Session::put('filament_dark_mode', $darkMode);
+            }
+
+            if ($customCss) {
+                Session::put('filament_custom_css', $customCss);
+            } else {
+                Session::forget('filament_custom_css');
+            }
         }
 
         $this->currentTheme = $theme;
         $this->currentColors = $colors;
+        $this->darkMode = $darkMode;
+        $this->customCss = $customCss;
     }
 
     public function getThemeInstance(?string $themeName = null): ?Theme
@@ -188,9 +206,124 @@ class ThemeManager
                 'label' => $theme->getLabel(),
                 'colors' => $theme->getColors(),
                 'preview' => $theme->getPreviewColors(),
+                'has_dark_mode' => method_exists($theme, 'hasDarkMode') ? $theme->hasDarkMode() : false,
             ];
         }
 
         return $themes;
+    }
+
+    public function getDarkMode(): string
+    {
+        if ($this->darkMode !== null) {
+            return $this->darkMode;
+        }
+
+        $plugin = $this->getPlugin();
+
+        if ($plugin?->isUserMode() && auth()->check()) {
+            $userTheme = UserTheme::where('user_id', auth()->id())
+                ->where('panel_id', Filament::getCurrentPanel()?->getId())
+                ->first();
+
+            if ($userTheme && $userTheme->dark_mode) {
+                $this->darkMode = $userTheme->dark_mode;
+                return $this->darkMode;
+            }
+        } else {
+            $darkMode = Session::get('filament_dark_mode');
+            if ($darkMode) {
+                $this->darkMode = $darkMode;
+                return $this->darkMode;
+            }
+        }
+
+        return config('filament-theme-switcher.dark_mode.default', 'system');
+    }
+
+    public function setDarkMode(string $mode): void
+    {
+        $plugin = $this->getPlugin();
+
+        if ($plugin?->isUserMode() && auth()->check()) {
+            UserTheme::where('user_id', auth()->id())
+                ->where('panel_id', Filament::getCurrentPanel()?->getId())
+                ->update(['dark_mode' => $mode]);
+        } else {
+            Session::put('filament_dark_mode', $mode);
+        }
+
+        $this->darkMode = $mode;
+    }
+
+    public function getCustomCss(): ?string
+    {
+        if ($this->customCss !== null) {
+            return $this->customCss;
+        }
+
+        $plugin = $this->getPlugin();
+
+        if ($plugin?->isUserMode() && auth()->check()) {
+            $userTheme = UserTheme::where('user_id', auth()->id())
+                ->where('panel_id', Filament::getCurrentPanel()?->getId())
+                ->first();
+
+            if ($userTheme && $userTheme->custom_css) {
+                $this->customCss = $userTheme->custom_css;
+                return $this->customCss;
+            }
+        } else {
+            $css = Session::get('filament_custom_css');
+            if ($css) {
+                $this->customCss = $css;
+                return $this->customCss;
+            }
+        }
+
+        return null;
+    }
+
+    public function isDarkModeEnabled(): bool
+    {
+        return config('filament-theme-switcher.dark_mode.enabled', true);
+    }
+
+    public function isCustomCssEnabled(): bool
+    {
+        return config('filament-theme-switcher.custom_css.enabled', true);
+    }
+
+    public function isImportExportEnabled(): bool
+    {
+        return config('filament-theme-switcher.import_export.enabled', true);
+    }
+
+    public function exportTheme(): array
+    {
+        return [
+            'theme' => $this->getCurrentTheme(),
+            'colors' => $this->getCurrentColors(),
+            'dark_mode' => $this->getDarkMode(),
+            'custom_css' => $this->getCustomCss(),
+            'exported_at' => now()->toIso8601String(),
+            'version' => '2.0',
+        ];
+    }
+
+    public function importTheme(array $data): bool
+    {
+        if (!isset($data['theme'])) {
+            return false;
+        }
+
+        $this->setTheme(
+            $data['theme'],
+            $data['colors'] ?? null,
+            $data['dark_mode'] ?? null,
+            $data['custom_css'] ?? null
+        );
+
+        return true;
     }
 }

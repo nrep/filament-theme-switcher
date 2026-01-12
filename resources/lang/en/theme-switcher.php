@@ -31,4 +31,24 @@ return [
         'rose' => 'Rose',
         'amber' => 'Amber',
     ],
+
+    // Dark Mode
+    'dark_mode' => 'Dark Mode',
+    'dark_mode_description' => 'Choose your preferred color scheme for the interface.',
+    'dark_mode_preference' => 'Color Scheme',
+    'dark_mode_light' => 'Light',
+    'dark_mode_dark' => 'Dark',
+    'dark_mode_system' => 'System',
+
+    // Custom CSS
+    'custom_css' => 'Custom CSS',
+    'custom_css_description' => 'Add your own custom CSS styles to further customize the appearance.',
+    'custom_css_label' => 'CSS Styles',
+
+    // Import/Export
+    'export' => 'Export Theme',
+    'import' => 'Import Theme',
+    'exported' => 'Theme exported successfully!',
+    'imported' => 'Theme imported successfully!',
+    'import_error' => 'Failed to import theme. Please check the file format.',
 ];

@@ -47,4 +47,46 @@ return [
         'enabled' => true,
         'ttl' => 3600,
     ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Dark Mode
+    |--------------------------------------------------------------------------
+    |
+    | Configure dark mode behavior. When enabled, users can toggle between
+    | light and dark modes. System mode will follow the user's OS preference.
+    |
+    | Supported modes: "light", "dark", "system"
+    |
+    */
+    'dark_mode' => [
+        'enabled' => true,
+        'default' => 'system',
+        'toggle_in_header' => true,
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Custom CSS
+    |--------------------------------------------------------------------------
+    |
+    | Allow users to add custom CSS to their theme.
+    |
+    */
+    'custom_css' => [
+        'enabled' => true,
+        'max_length' => 10000,
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Theme Import/Export
+    |--------------------------------------------------------------------------
+    |
+    | Allow users to import and export theme configurations.
+    |
+    */
+    'import_export' => [
+        'enabled' => true,
+    ],
 ];

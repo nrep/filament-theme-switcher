@@ -7,6 +7,9 @@ use Filament\Forms\Components\ColorPicker;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\Toggle;
+use Filament\Forms\Components\ToggleButtons;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Form;
@@ -69,6 +72,8 @@ class ThemeSettings extends Page implements HasForms
         $this->form->fill([
             'theme' => $themeManager->getCurrentTheme(),
             'colors' => $themeManager->getCurrentColors() ?? [],
+            'dark_mode' => $themeManager->getDarkMode(),
+            'custom_css' => $themeManager->getCustomCss() ?? '',
         ]);
     }
 
@@ -122,6 +127,40 @@ class ThemeSettings extends Page implements HasForms
                             ]),
                     ])
                     ->collapsible(),
+
+                Section::make(__('filament-theme-switcher::theme-switcher.dark_mode'))
+                    ->description(__('filament-theme-switcher::theme-switcher.dark_mode_description'))
+                    ->schema([
+                        ToggleButtons::make('dark_mode')
+                            ->label(__('filament-theme-switcher::theme-switcher.dark_mode_preference'))
+                            ->options([
+                                'light' => __('filament-theme-switcher::theme-switcher.dark_mode_light'),
+                                'dark' => __('filament-theme-switcher::theme-switcher.dark_mode_dark'),
+                                'system' => __('filament-theme-switcher::theme-switcher.dark_mode_system'),
+                            ])
+                            ->icons([
+                                'light' => 'heroicon-o-sun',
+                                'dark' => 'heroicon-o-moon',
+                                'system' => 'heroicon-o-computer-desktop',
+                            ])
+                            ->inline()
+                            ->default('system'),
+                    ])
+                    ->visible(fn () => $themeManager->isDarkModeEnabled())
+                    ->collapsible(),
+
+                Section::make(__('filament-theme-switcher::theme-switcher.custom_css'))
+                    ->description(__('filament-theme-switcher::theme-switcher.custom_css_description'))
+                    ->schema([
+                        Textarea::make('custom_css')
+                            ->label(__('filament-theme-switcher::theme-switcher.custom_css_label'))
+                            ->placeholder('.fi-sidebar { background: #1a1a2e; }')
+                            ->rows(8)
+                            ->maxLength(config('filament-theme-switcher.custom_css.max_length', 10000)),
+                    ])
+                    ->visible(fn () => $themeManager->isCustomCssEnabled())
+                    ->collapsible()
+                    ->collapsed(),
             ])
             ->statePath('data');
     }
@@ -149,7 +188,9 @@ class ThemeSettings extends Page implements HasForms
 
         $themeManager->setTheme(
             $data['theme'],
-            !empty($colors) ? $colors : null
+            !empty($colors) ? $colors : null,
+            $data['dark_mode'] ?? 'system',
+            $data['custom_css'] ?? null
         );
 
         Notification::make()
@@ -163,11 +204,13 @@ class ThemeSettings extends Page implements HasForms
     public function resetTheme(): void
     {
         $themeManager = app(ThemeManager::class);
-        $themeManager->setTheme('default', null);
+        $themeManager->setTheme('default', null, 'system', null);
 
         $this->form->fill([
             'theme' => 'default',
             'colors' => [],
+            'dark_mode' => 'system',
+            'custom_css' => '',
         ]);
 
         Notification::make()
@@ -176,5 +219,32 @@ class ThemeSettings extends Page implements HasForms
             ->send();
 
         $this->redirect(request()->header('Referer'));
+    }
+
+    public function exportTheme(): void
+    {
+        $themeManager = app(ThemeManager::class);
+        $data = $themeManager->exportTheme();
+
+        $this->dispatch('download-theme', json: json_encode($data, JSON_PRETTY_PRINT));
+
+        Notification::make()
+            ->title(__('filament-theme-switcher::theme-switcher.exported'))
+            ->success()
+            ->send();
+    }
+
+    protected function getHeaderActions(): array
+    {
+        $themeManager = app(ThemeManager::class);
+
+        return [
+            Action::make('export')
+                ->label(__('filament-theme-switcher::theme-switcher.export'))
+                ->icon('heroicon-o-arrow-down-tray')
+                ->color('gray')
+                ->action('exportTheme')
+                ->visible(fn () => $themeManager->isImportExportEnabled()),
+        ];
     }
 }
