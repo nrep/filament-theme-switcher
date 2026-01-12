@@ -121,4 +121,11 @@ return [
     'login_split' => 'Split Screen',
     'login_fullscreen' => 'Fullscreen Background',
     'login_gradient' => 'Gradient Background',
+
+    // Multi-Panel Support
+    'panel_themes' => 'Panel Themes',
+    'panel_specific_theme' => 'Panel-Specific Theme',
+    'inherit_from_parent' => 'Inherit from Parent Panel',
+    'panel_colors' => 'Panel Colors',
+    'no_panel_override' => 'Using default theme',
 ];
